@@ -4,19 +4,18 @@
 
     <div class='container'>
         <div class="card card-panel" style="margin-top:15px">
-            <h3 style="text-align:center; ">Login</h3>
+            <h3 style="text-align:center; ">Registration</h3>
 
             <form method="post" class='col s12'>
                 <div class='container'>
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    {{ forms.as_p }}
                 </div>
                 <div class='row'>
-                    <input type="submit" class="col offset-s2 s8 waves-effect waves-light btn blue darken-2" value="Log in" />
-                </div>
-                <div class='row'>
-                    <a class="col offset-s2 s8 waves-effect waves-light btn green">Sign Up</a>
+                    <input type="submit" value="Register" class="col offset-s2 s8 waves-effect waves-light btn green" />
                 </div>
             </form>
         </div>
     </div>
+
+{% endblock %}
