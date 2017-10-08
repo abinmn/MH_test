@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      {% load static %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet'%}">
+    <link rel="stylesheet" type="text/css" href="{%static 'mhsite/css/jquery.fullPage.css'%}" />
+    <link type="text/css" rel="stylesheet" href="{%static 'mhsite/css/materialize.min.css'%}"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="{%static 'mhsite/css/index.css'%}"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>MH-site</title>
+  </head>
+
+  <body>
+
+    <nav class='z-depth-0 transparent navbar'>
+          <div class="nav-wrapper pad">
+            <a href="index.html" class="brand-logo">MEC-MH</a>
+            <ul id="navbar" class="right hide-on-med-and-down web">
+              <li class='active'><a href="/mhsite">Home</a></li>
+              <li><a href="#">Gallery</a></li>
+              <li><a href="#">Student's corner</a></li>
+              <li><a href="#">Mess</a></li>
+              <li><a href="#">Contacts</a></li>
+              <li><a href="/mhsite/login">Login/Signup</a></li>
+            </ul>
+            <ul id="navbar" class="left mobile">
+              <li><a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a></li>
+            </ul>
+          </div>
+    </nav>
+
+    <div class='sidemenu'>
+        <ul id="slide-out" class="side-nav mobile">
+            <li class='active'><a href="/mhsite">Home</a></li>
+            <li><a href="#">Gallery</a></li>
+            <li><a href="#">Student's corner</a></li>
+            <li><a href="#">Mess</a></li>
+            <li><a href="#">Contacts</a></li>
+            <li><a href="/mhsite/login">Login/Signup</a></li>
+        </ul>
+    </div>
+
+
+    {% block body %}
+
+
+    <div class='landing'>
+      <div class='landing_content flow-text land_text web'>
+        <strong><p class='welcome_text' style='font-size: 33px; font-weight: bold; letter-spacing:2px;'>Welcome to MEC-MH</p></strong>
+        College Hostel of <strong>Govt. Model Engineering College</strong> Kochi
+      </div>
+      <div class='landing_content flow-text mobile'>
+        <strong><p class='welcome_text' style='font-size: 24px; font-weight: bold; letter-spacing:2px;'>WELCOME TO MEC-MH</p></strong>
+        College Hostel of <br><strong>Govt. Model Engineering College</strong><br> Kochi
+      </div>
+    </div>
+
+    {% endblock %}
+
+    <script type="text/javascript" src="{%static 'mhsite/js/jquery-3.2.1.min.js'%}"></script>
+    <script type="text/javascript" src="{%static 'mhsite/js/jquery.fullPage.min.js'%}"></script>
+    <script type="text/javascript" src="{%static 'mhsite/js/materialize.min.js'%}"></script>
+    <script type="text/javascript" src="{%static 'mhsite/js/index.js'%}"></script>
+
+  </body>
+</html>
