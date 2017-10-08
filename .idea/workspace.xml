@@ -3,13 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b6f0b047-1f3e-4d24-85a0-2697a03d7331" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mh_test/settings.py" afterPath="$PROJECT_DIR$/mh_test/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mhsite/forms.py" afterPath="$PROJECT_DIR$/mhsite/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mhsite/templates/base.html" afterPath="$PROJECT_DIR$/mhsite/templates/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/login.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/login.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/registration.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/registration.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mhsite/urls.py" afterPath="$PROJECT_DIR$/mhsite/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mhsite/views.py" afterPath="$PROJECT_DIR$/mhsite/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -33,8 +27,8 @@
       <file leaf-file-name="forms.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mhsite/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+            <state relative-caret-position="36">
+              <caret line="14" column="24" lean-forward="true" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="24" />
               <folding>
                 <element signature="e#0#54#0" expanded="true" />
               </folding>
@@ -341,8 +335,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mhsite/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+        <state relative-caret-position="36">
+          <caret line="14" column="24" lean-forward="true" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="24" />
           <folding>
             <element signature="e#0#54#0" expanded="true" />
           </folding>
