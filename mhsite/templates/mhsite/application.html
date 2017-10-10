@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class='container'>
+    <div class="card card-panel" style="margin-top:15px">
+        <h3 style="text-align:center; ">Application Form</h3>
+
+        <form method="post" class='col s12'>
+            <div class='container'>
+                {% csrf_token %}
+                {{ form.as_p }}
+            </div>
+            <div class='row'>
+                <input type="submit" class="col offset-s2 s8 waves-effect waves-light btn blue darken-2" value="Submit Form" />
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

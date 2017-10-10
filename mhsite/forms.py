@@ -1,7 +1,19 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
+from .models import Application
 
+#Application form
+class ApplicationForm(forms.ModelForm):
+    dob=forms.DateField(widget=forms.DateInput(format='%d/%m/%Y'),
+                        input_formats=('%d/%m/%Y',))
+    class Meta:
+        model=Application
+        fields='__all__'
+
+
+
+#Signup Form after application is approved
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
