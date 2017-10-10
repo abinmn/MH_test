@@ -9,7 +9,7 @@
             <form method="post" class='col s12'>
                 {% csrf_token %}
                 {% for i in forms %}
-                <div class='row'>>
+                <div class='row'>
                     <div class='input-field col s8 offset-s2'>
                         {{i}}
                         {{ i.label_tag }}
