@@ -3,21 +3,25 @@
 {% block body %}
 
     <div class='container'>
-        <div class="card card-panel" style="margin-top:15px">
-            <h3 style="text-align:center; ">Login</h3>
-
-            <form method="post" class='col s12'>
-                <div class='container'>
-                    {% csrf_token %}
-                    {{ form.as_p }}
+        <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
+            <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Login</h3>
+            <form action='#' method='post' class='col s12'>
+                {% csrf_token %}
+                {% for i in form %}
+                <div class='row'>>
+                    <div class='input-field col s8 offset-s2'>
+                        {{i}}
+                        {{ i.label_tag }}
+                    </div>
                 </div>
+                {% endfor %}
                 <div class='row'>
                     <input type="submit" class="col offset-s2 s8 waves-effect waves-light btn blue darken-2" value="Log in" />
                 </div>
                 <div class='row'>
                     <a href='/register' class="col offset-s2 s8 waves-effect waves-light btn green">Sign Up</a>
                 </div>
-            </form>
+           </form>
         </div>
     </div>
 
