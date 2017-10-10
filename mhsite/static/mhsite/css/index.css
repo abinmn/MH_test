@@ -11,11 +11,10 @@
 }
 
 body{
-    background: url('../assets/mh-dark.jpg') no-repeat center center fixed ;
+    background:radial-gradient(transparent,black), url('../assets/mh-dark.jpg') no-repeat center center fixed;
     background-size: cover;
     background-position:fixed;
 }
-
 input{
     color:rgba(255, 255, 255, 0.87);
 }
