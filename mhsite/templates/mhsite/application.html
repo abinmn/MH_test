@@ -8,14 +8,31 @@
 
             <form method="post" class='col s12'>
                 {% csrf_token %}
-                {% for i in form %}
-                <div class='row'>
-                    <div class='input-field col s8 offset-s2'>
-                        {{i}}
-                        {{ i.label_tag }}
+
+
+          {% for field in form %}
+
+            <!-- Form to  display if value has error -->
+            {% if field.errors %}
+              <div class='error'>
+                    <div class='row'>
+                        <div class='input-field col s8 offset-s2'>
+                            {{field}}
+                            {{ field.label_tag }}
+                            {{ field.errors|striptags }}
+                        </div>
                     </div>
-                </div>
-                {% endfor %}
+              </div>
+            {% else %}
+              <div class='row'>
+                  <div class='input-field col s8 offset-s2'>
+                      {{field}}
+                      {{ field.label_tag }}
+                  </div>
+              </div>
+            {% endif %}
+
+        {% endfor %}
                 <div class='row'>
                     <input type="submit" value="Register" class="col offset-s2 s8 waves-effect waves-light btn green" />
                 </div>

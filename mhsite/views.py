@@ -17,9 +17,11 @@ def application(request):
             form.save()
             return redirect('/')
         else:
+            print (form.errors)
+            args={'form':form}
             return render(request,'mhsite/application.html',args)
     else:
-            return render(request,'mhsite/application.html',args)
+        return render(request,'mhsite/application.html',args)
 
 def registration(request):
     if request.method == 'POST':

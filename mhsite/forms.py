@@ -5,8 +5,7 @@ from .models import Application
 
 #Application form
 class ApplicationForm(forms.ModelForm):
-    dob=forms.DateField(widget=forms.DateInput(format='%d/%m/%Y'),
-                        input_formats=('%d/%m/%Y',))
+    date_of_birth=forms.DateField(input_formats=('%d/%m/%Y',))
     class Meta:
         model=Application
         fields='__all__'
