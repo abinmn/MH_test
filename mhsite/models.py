@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
 class Application(models.Model):
     admission_number=models.CharField(max_length=7,
                                     validators=[RegexValidator(regex=r'^[0-9]{4}/[0-9]{2}$',message='The format for admission number is 1234/17')],
-                                    help_text='9999/17',unique=True)
+                                    help_text='1234/17',unique=True)
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
     address=models.CharField(max_length=500)
@@ -20,3 +21,6 @@ class Application(models.Model):
     category=models.CharField(max_length=10)
     religion=models.CharField(max_length=50)
     caste=models.CharField(max_length=50)
+    status=models.BooleanField(default=False)
+
+#class Profile(models.Model):
