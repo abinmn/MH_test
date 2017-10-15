@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render,redirect
 from mhsite.forms import RegistrationForm
 from .forms import ApplicationForm
+from .models import Application
 
 
 def home(request):
@@ -12,6 +13,7 @@ def application(request):
     args={'form':form}
     if request.method=='POST':
         form=ApplicationForm(request.POST)
+
 
         if form.is_valid():
             form.save()

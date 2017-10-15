@@ -5,11 +5,11 @@ from .models import Application
 
 #Application form
 class ApplicationForm(forms.ModelForm):
-    date_of_birth=forms.DateField(input_formats=('%d/%m/%Y',))
+    date_of_birth=forms.DateField(input_formats=('%d/%m/%Y',),)
+
     class Meta:
         model=Application
         fields='__all__'
-
 
 
 #Signup Form after application is approved

@@ -7,7 +7,7 @@ from django.db import models
 class Application(models.Model):
     admission_number=models.CharField(max_length=7,
                                     validators=[RegexValidator(regex=r'^[0-9]{4}/[0-9]{2}$',message='The format for admission number is 1234/17')],
-                                    help_text='9999/17')
+                                    help_text='9999/17',unique=True)
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
     address=models.CharField(max_length=500)
