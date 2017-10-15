@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from django.contrib.auth.models import User
 from .models import Application
+from django.contrib.auth.models import User
 
 #Application form
 class ApplicationForm(forms.ModelForm):
@@ -15,6 +15,7 @@ class ApplicationForm(forms.ModelForm):
 #Signup Form after application is approved
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
+    first_name = forms.CharField(required=True)
 
     class Meta:
         model = User
@@ -26,6 +27,7 @@ class RegistrationForm(UserCreationForm):
             'password1',
             'password2',
         )
+
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=False)
         user.first_name = self.cleaned_data['first_name']
