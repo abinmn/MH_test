@@ -21,6 +21,10 @@ def loginf(request):
                 login(request, user
                       )
                 return redirect('/')
+        else:
+            args = {'form': form, 'error':True}
+            return render(request,'mhsite/login.html',args)
+
     return render(request, 'mhsite/login.html', args)
 
 def logoutf(request):
