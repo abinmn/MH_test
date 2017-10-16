@@ -7,13 +7,21 @@
             <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Login</h3>
             <form action='#' method='post' class='col s12'>
                 {% csrf_token %}
-                {% for i in form %}
-                <div class='row'>>
-                    <div class='input-field col s8 offset-s2'>
-                        {{i}}
-                        {{ i.label_tag }}
-                    </div>
+
+                <div class='row'>
+                  <div class='input-field col s8 offset-s2'>
+                {% if error %}
+                    <h5 style="text-align:center;color:rgba(255,255,255,0.87); ">Invalid details!</h5>
+                {% endif %}
+                  </div>
                 </div>
+                {% for field in form %}
+                <div class='row'>
+                  <div class='input-field col s8 offset-s2'>
+                      {{field}}
+                      {{ field.label_tag }}
+                  </div>
+                 </div>
                 {% endfor %}
                 <div class='row'>
                     <input type="submit" class="col offset-s2 s8 waves-effect waves-light btn blue darken-2" value="Log in" />

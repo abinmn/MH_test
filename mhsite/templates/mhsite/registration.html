@@ -13,6 +13,7 @@
                     <div class='input-field col s8 offset-s2'>
                         {{i}}
                         {{ i.label_tag }}
+                        {{ field.errors|striptags }}
                     </div>
                 </div>
                 {% endfor %}
