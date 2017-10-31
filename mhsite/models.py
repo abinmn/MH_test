@@ -23,4 +23,7 @@ class Application(models.Model):
     caste=models.CharField(max_length=50)
     status=models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.first_name+" "+self.last_name
+
 #class Profile(models.Model):
