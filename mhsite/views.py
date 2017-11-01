@@ -1,9 +1,9 @@
 from __future__ import unicode_literals
 from django.shortcuts import render,redirect
-from mhsite.forms import RegistrationForm
-from .forms import ApplicationForm
+from mhsite.forms import RegistrationForm,ApplicationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from mhsite.models import Application
 
 def home(request):
     return render(request, 'mhsite/index.html')
@@ -54,10 +54,15 @@ def registration(request):
         form = RegistrationForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect('/')
+            admission_number = (form.cleaned_data['admission_number'])
+            if Application.objects.get(admission_number=admission_number).status:
+                form.save()
+                return redirect('/')
+            else:
+                print ("Application not approved yet")
+                return render(request,'mhsite/application_status.html')
+
         else:
-            print (form.errors)
             args={'form':form}
             return render(request,'mhsite/application.html',args)
 

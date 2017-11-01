@@ -2,6 +2,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .models import Application
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
+
+
 
 #Application form
 class ApplicationForm(forms.ModelForm):
@@ -9,18 +12,23 @@ class ApplicationForm(forms.ModelForm):
 
     class Meta:
         model=Application
-        fields='__all__'
+        exclude=('status',)
 
 
 #Signup Form after application is approved
 class RegistrationForm(UserCreationForm):
+    admission_number=forms.CharField(max_length=7,
+                                    validators=[RegexValidator(regex=r'^[0-9]{4}/[0-9]{2}$',message='The format for admission number is 1234/17')],
+                                    help_text='1234/17')
     email = forms.EmailField(required=True)
     first_name = forms.CharField(required=True)
+
 
     class Meta:
         model = User
 
         fields = (
+            'admission_number',
             'first_name',
             'last_name',
             'email',
