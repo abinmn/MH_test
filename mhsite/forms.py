@@ -3,16 +3,17 @@ from django import forms
 from .models import Application
 from django.contrib.auth.models import User
 
-#Application form
+
+# Application form
 class ApplicationForm(forms.ModelForm):
-    date_of_birth=forms.DateField(input_formats=('%d/%m/%Y',))
+    date_of_birth = forms.DateField(input_formats=('%d/%m/%Y',))
+
     class Meta:
-        model=Application
-        fields='__all__'
+        model = Application
+        fields = '__all__'
 
 
-
-#Signup Form after application is approved
+# Signup Form after application is approved
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(required=True)
