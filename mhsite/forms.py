@@ -6,16 +6,25 @@ from django.core.validators import RegexValidator
 
 
 
-#Application form
+
+# Application form
 class ApplicationForm(forms.ModelForm):
+<<<<<<< HEAD
     date_of_birth=forms.DateField(input_formats=('%d/%m/%Y',),)
 
     class Meta:
         model=Application
         exclude=('status',)
+=======
+    date_of_birth = forms.DateField(input_formats=('%d/%m/%Y',))
+
+    class Meta:
+        model = Application
+        fields = '__all__'
+>>>>>>> 1604a83491d33b27fe1cf01e9d657fc921011652
 
 
-#Signup Form after application is approved
+# Signup Form after application is approved
 class RegistrationForm(UserCreationForm):
     admission_number=forms.CharField(max_length=7,
                                     validators=[RegexValidator(regex=r'^[0-9]{4}/[0-9]{2}$',message='The format for admission number is 1234/17')],
