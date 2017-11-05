@@ -1,8 +1,13 @@
-from django.shortcuts import render, redirect
-from mhsite.forms import RegistrationForm
-from .forms import ApplicationForm
+from __future__ import unicode_literals
+from django.shortcuts import render,redirect
+from mhsite.forms import RegistrationForm,ApplicationForm,ExpenseForm,ReportForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from mhsite.models import Application,Expense
+from django.views import View
+from django.views.generic.edit import FormView
+from django.utils.dateformat import format
+import datetime
 
 
 def home(request):
@@ -53,6 +58,7 @@ def application(request):
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
 
+
         if form.is_valid():
             form.save()
             return redirect('/')
@@ -69,8 +75,14 @@ def registration(request):
         form = RegistrationForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect('/')
+            admission_number = (form.cleaned_data['admission_number'])
+            if Application.objects.get(admission_number=admission_number).status:
+                form.save()
+                return redirect('/')
+            else:
+                print ("Application not approved yet")
+                return render(request,'mhsite/application_status.html')
+
         else:
             print(form.errors)
             args = {'form': form, 'name': url_lock('reg')}
@@ -89,3 +101,39 @@ def url_lock(page):
         index[i] = 'active'
         return index
     return index
+
+def expense(request):
+    form=ExpenseForm()
+    args = {'form': form}
+    if request.method=='POST':
+        form=ExpenseForm(request.POST)
+
+        if form.is_valid():
+
+
+
+            form.save()
+            return redirect('/')
+        else:
+            return render(request, 'mhsite/expense_tracker.html', args)
+
+
+    else:
+        return render(request,'mhsite/expense_tracker.html',args)
+
+
+class Report(FormView):
+    template_name = 'mhsite/report.html'
+    form_class = ReportForm
+
+    def form_valid(self, form):
+        date = form.cleaned_data.get('date')
+        year = date.year
+        month = format(date, 'm')
+        day = '01'
+        return redirect('report_details', year, month, day)
+
+class ReportDetails(View):
+    def get(self, request, year, month, day):
+        expense=Expense.objects.get(date=(year+'-'+month+'-'+day))
+        return render(request, 'mhsite/report_details.html', {'data': expense})
