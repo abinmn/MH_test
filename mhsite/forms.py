@@ -1,27 +1,21 @@
+from django.utils import timezone
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Application
+from .models import Application,Expense
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-
+import datetime
+from django.utils.dateformat import format
 
 
 
 # Application form
 class ApplicationForm(forms.ModelForm):
-<<<<<<< HEAD
     date_of_birth=forms.DateField(input_formats=('%d/%m/%Y',),)
 
     class Meta:
         model=Application
         exclude=('status',)
-=======
-    date_of_birth = forms.DateField(input_formats=('%d/%m/%Y',))
-
-    class Meta:
-        model = Application
-        fields = '__all__'
->>>>>>> 1604a83491d33b27fe1cf01e9d657fc921011652
 
 
 # Signup Form after application is approved
@@ -56,3 +50,26 @@ class RegistrationForm(UserCreationForm):
 
         if commit:
             user.save()
+
+class ExpenseForm(forms.ModelForm):
+
+    date=forms.DateField(widget=forms.SelectDateWidget(years=range(2017,2031)),initial=timezone.now())
+
+
+    class Meta:
+        model=Expense
+        fields='__all__'
+
+    def save(self,commit=True):
+        data=super(ExpenseForm,self).save(commit=False)
+        date = self.cleaned_data.get('date')
+        year = date.year
+        month = format(date, 'm')
+        day = '01'
+        data.date=(datetime.datetime.strptime(day+month+str(year), "%d%m%Y").date())
+
+        if commit:
+            data.save()
+
+class ReportForm(forms.Form):
+    date=forms.DateField(widget=forms.SelectDateWidget(years=range(2017,2031)),initial=timezone.now())

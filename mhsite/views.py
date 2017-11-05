@@ -1,15 +1,13 @@
-<<<<<<< HEAD
 from __future__ import unicode_literals
 from django.shortcuts import render,redirect
-from mhsite.forms import RegistrationForm,ApplicationForm
-=======
-from django.shortcuts import render, redirect
-from mhsite.forms import RegistrationForm
-from .forms import ApplicationForm
->>>>>>> 1604a83491d33b27fe1cf01e9d657fc921011652
+from mhsite.forms import RegistrationForm,ApplicationForm,ExpenseForm,ReportForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from mhsite.models import Application
+from mhsite.models import Application,Expense
+from django.views import View
+from django.views.generic.edit import FormView
+from django.utils.dateformat import format
+import datetime
 
 
 def home(request):
@@ -86,14 +84,9 @@ def registration(request):
                 return render(request,'mhsite/application_status.html')
 
         else:
-<<<<<<< HEAD
-            args={'form':form}
-            return render(request,'mhsite/application.html',args)
-=======
             print(form.errors)
             args = {'form': form, 'name': url_lock('reg')}
             return render(request, 'mhsite/application.html', args)
->>>>>>> 1604a83491d33b27fe1cf01e9d657fc921011652
 
     else:
         form = RegistrationForm()
@@ -108,3 +101,39 @@ def url_lock(page):
         index[i] = 'active'
         return index
     return index
+
+def expense(request):
+    form=ExpenseForm()
+    args = {'form': form}
+    if request.method=='POST':
+        form=ExpenseForm(request.POST)
+
+        if form.is_valid():
+
+
+
+            form.save()
+            return redirect('/')
+        else:
+            return render(request, 'mhsite/expense_tracker.html', args)
+
+
+    else:
+        return render(request,'mhsite/expense_tracker.html',args)
+
+
+class Report(FormView):
+    template_name = 'mhsite/report.html'
+    form_class = ReportForm
+
+    def form_valid(self, form):
+        date = form.cleaned_data.get('date')
+        year = date.year
+        month = format(date, 'm')
+        day = '01'
+        return redirect('report_details', year, month, day)
+
+class ReportDetails(View):
+    def get(self, request, year, month, day):
+        expense=Expense.objects.get(date=(year+'-'+month+'-'+day))
+        return render(request, 'mhsite/report_details.html', {'data': expense})
