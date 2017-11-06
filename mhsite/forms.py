@@ -53,7 +53,7 @@ class RegistrationForm(UserCreationForm):
 
 class ExpenseForm(forms.ModelForm):
 
-    date=forms.DateField(widget=forms.SelectDateWidget(years=range(2017,2031)),initial=timezone.now())
+    date=forms.DateField(widget=forms.TextInput(attrs={"class":"datepicker"}))
 
 
     class Meta:
@@ -72,4 +72,4 @@ class ExpenseForm(forms.ModelForm):
             data.save()
 
 class ReportForm(forms.Form):
-    date=forms.DateField(widget=forms.SelectDateWidget(years=range(2017,2031)),initial=timezone.now())
+    date=forms.DateField(widget=forms.TextInput(attrs={"class":"datepicker"}))

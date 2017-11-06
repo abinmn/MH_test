@@ -6,6 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from mhsite.models import Application,Expense
 from django.views import View
 from django.views.generic.edit import FormView
+from django.db import IntegrityError
 from django.utils.dateformat import format
 import datetime
 
@@ -102,24 +103,38 @@ def url_lock(page):
         return index
     return index
 
-def expense(request):
-    form=ExpenseForm()
-    args = {'form': form}
+def expense(request,year,month,day):
+
     if request.method=='POST':
         form=ExpenseForm(request.POST)
 
         if form.is_valid():
+            try:
+                form.save()
+                return redirect('/')
+            except IntegrityError as e:
 
-
-
-            form.save()
-            return redirect('/')
+                if 'UNIQUE constraint' in e.message:
+                    args={'update':True}
+                    return render(request, 'mhsite/expense_tracker.html', args)
+                return render(request, 'mhsite/expense_tracker.html', args)
         else:
+            args={'form':form}
             return render(request, 'mhsite/expense_tracker.html', args)
 
 
     else:
-        return render(request,'mhsite/expense_tracker.html',args)
+        try:
+            date=(year+'-'+month+'-'+day)
+            expense=Expense.objects.get(date=date)
+            data={'item5':expense.item5}
+            form=ExpenseForm(initial=data)
+            args = {'form': form}
+            return render(request, 'mhsite/expense_tracker.html', args)
+        except Expense.DoesNotExist:
+            form=ExpenseForm()
+            args = {'form': form}
+            return render(request, 'mhsite/expense_tracker.html',args)
 
 
 class Report(FormView):
@@ -135,5 +150,6 @@ class Report(FormView):
 
 class ReportDetails(View):
     def get(self, request, year, month, day):
-        expense=Expense.objects.get(date=(year+'-'+month+'-'+day))
-        return render(request, 'mhsite/report_details.html', {'data': expense})
+        date=(year+'-'+month+'-'+day)
+        expense=Expense.objects.get(date=date)
+        return render(request, 'mhsite/report_details.html', {'data': expense,'link':date})
