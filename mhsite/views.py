@@ -104,19 +104,24 @@ def url_lock(page):
     return index
 
 def expense(request,year,month,day):
+    date=(year+'-'+month+'-'+day)
 
     if request.method=='POST':
-        form=ExpenseForm(request.POST)
+        try:
+            expense=Expense.objects.get(date=date)
+            form=ExpenseForm(request.POST,instance=expense)
+
+        except Expense.DoesNotExist:
+            form=ExpenseForm(request.POST)
 
         if form.is_valid():
+
             try:
                 form.save()
-                return redirect('/')
+                return redirect('report'+'/'+date)
+
             except IntegrityError as e:
 
-                if 'UNIQUE constraint' in e.message:
-                    args={'update':True}
-                    return render(request, 'mhsite/expense_tracker.html', args)
                 return render(request, 'mhsite/expense_tracker.html', args)
         else:
             args={'form':form}
@@ -125,14 +130,13 @@ def expense(request,year,month,day):
 
     else:
         try:
-            date=(year+'-'+month+'-'+day)
             expense=Expense.objects.get(date=date)
-            data={'item5':expense.item5}
-            form=ExpenseForm(initial=data)
+            form=ExpenseForm(instance=expense)
             args = {'form': form}
             return render(request, 'mhsite/expense_tracker.html', args)
+
         except Expense.DoesNotExist:
-            form=ExpenseForm()
+            form=ExpenseForm(initial={'date':date})
             args = {'form': form}
             return render(request, 'mhsite/expense_tracker.html',args)
 
@@ -151,5 +155,9 @@ class Report(FormView):
 class ReportDetails(View):
     def get(self, request, year, month, day):
         date=(year+'-'+month+'-'+day)
-        expense=Expense.objects.get(date=date)
-        return render(request, 'mhsite/report_details.html', {'data': expense,'link':date})
+        try:
+            expense=Expense.objects.get(date=date)
+            return render(request, 'mhsite/report_details.html', {'data': expense,'link':date})
+
+        except Expense.DoesNotExist:
+            return redirect('expense',year,month,day)
