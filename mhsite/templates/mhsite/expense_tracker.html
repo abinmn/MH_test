@@ -1,19 +1,22 @@
-
+{%extends 'base.html' %}
 {% block body %}
 
 <div class='container'>
     <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
-        <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Registration</h3>
+        <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Expense Tracker</h3>
+
+          <div class='row'>
 
         <form method="post" class='col s12'>
             {% csrf_token %}
-
+            {{form.errors}}
+            {{form.non_field_errors}}
             {% for field in form %}
             <div class='row'>
                 <div class='input-field col s8 offset-s2'>
 
-                  {{field}}
-                  {{ field.label_tag }}
+                    {{field}}
+                    {{ field.label_tag }}
 
 
                 </div>
@@ -22,7 +25,7 @@
             {% endfor %}
 
             <div class='row'>
-                <input type="submit" value="Submit" class="col offset-s2 s8 waves-effect waves-light btn green" />
+                  <input type="submit" class="col offset-s2 s8 waves-effect waves-light btn blue darken-2" value="Submit" />
             </div>
 
 
