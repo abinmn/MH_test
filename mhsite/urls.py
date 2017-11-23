@@ -12,7 +12,7 @@ urlpatterns =[
     url(r'^gallery/$', views.gallery, name='gallery'),
     url(r'^mess/$', views.mess, name='mess'),
     url(r'^expense_tracker/(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})/$', views.expense, name='expense'),
-    url(r'report/$', views.Report.as_view(), name='report'),
-    url(r'report/(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})/$',views.ReportDetails.as_view(), name='report_details'),
-
+    url(r'^report/$', views.Report.as_view(), name='report'),
+    url(r'^report/(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})/$',views.ReportDetails.as_view(), name='report_details'),
+    url(r'^mess_cut/$',views.mess_cut,name='mess_cut')
 ]

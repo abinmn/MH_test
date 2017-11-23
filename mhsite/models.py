@@ -52,3 +52,10 @@ class Expense(models.Model):
 
     def __str__(self):
         return str(self.date)
+
+class MessCut(models.Model):
+    email=models.EmailField(unique=True)
+    mess_cut_dates=models.CharField(max_length=100000)
+
+    def __str__(self):
+        return self.email

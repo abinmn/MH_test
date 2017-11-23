@@ -1,15 +1,15 @@
 from __future__ import unicode_literals
 from django.shortcuts import render,redirect
-from mhsite.forms import RegistrationForm,ApplicationForm,ExpenseForm,ReportForm
+from mhsite.forms import RegistrationForm,ApplicationForm,ExpenseForm,ReportForm,MessCutForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from mhsite.models import Application,Expense
+from mhsite.models import Application,Expense,MessCut
 from django.views import View
 from django.views.generic.edit import FormView
 from django.db import IntegrityError
 from django.utils.dateformat import format
-import datetime
-
+from datetime import date, timedelta
+import json
 
 def home(request):
     args = {'name': url_lock('home')}
@@ -44,6 +44,7 @@ def loginf(request):
             args = {'form': form, 'error': True}
             return render(request, 'mhsite/login.html', args)
 
+
     return render(request, 'mhsite/login.html', args)
 
 
@@ -54,6 +55,7 @@ def logoutf(request):
 
 
 def application(request):
+
     form = ApplicationForm()
     args = {'form': form, 'name': url_lock('application')}
     if request.method == 'POST':
@@ -103,9 +105,49 @@ def url_lock(page):
         return index
     return index
 
+def date_gen(dict,start_date,end_date):
+    delta = end_date - start_date
+    for i in range(delta.days+1):
+        dict[str(start_date + timedelta(days=i))]=False
+
+    return dict
+
+
+def mess_cut(request):
+    if request.method=='POST':
+        form=MessCutForm(request.POST)
+
+        if form.is_valid():
+            email= request.user.email
+            start_date=form.cleaned_data['start_date']
+            end_date=form.cleaned_data['end_date']
+            try:
+                print (1)
+                obj=MessCut.objects.get(email=email)
+
+                date_list=json.loads(obj.mess_cut_dates)
+                date_list=(date_gen(date_list,start_date,end_date))
+                date_list = (json.dumps(date_list))
+                obj.mess_cut_dates=date_list
+                obj.save()
+            except:
+                print (2)
+                date_list = (date_gen({},start_date,end_date))
+                date_list = json.dumps(date_list)
+                obj = MessCut(email=email, mess_cut_dates=date_list)
+                obj.save()
+
+            return redirect('/')
+        else:
+            args={'form':form}
+            return render(request,'mhsite/mess_cut.html',args)
+    else:
+        form = MessCutForm()
+        args={'form':form}
+        return render(request,'mhsite/mess_cut.html',args)
+
 def expense(request,year,month,day):
     date=(year+'-'+month+'-'+day)
-
     if request.method=='POST':
         try:
             expense=Expense.objects.get(date=date)
@@ -127,14 +169,15 @@ def expense(request,year,month,day):
             args={'form':form}
             return render(request, 'mhsite/expense_tracker.html', args)
 
-
+#edit/create expense
     else:
+        #edit expense for a month
         try:
             expense=Expense.objects.get(date=date)
             form=ExpenseForm(instance=expense)
             args = {'form': form}
             return render(request, 'mhsite/expense_tracker.html', args)
-
+        #create expense for a month
         except Expense.DoesNotExist:
             form=ExpenseForm(initial={'date':date})
             args = {'form': form}
@@ -155,6 +198,7 @@ class Report(FormView):
 class ReportDetails(View):
     def get(self, request, year, month, day):
         date=(year+'-'+month+'-'+day)
+        #display expense of a month if it exist
         try:
             expense=Expense.objects.get(date=date)
             return render(request, 'mhsite/report_details.html', {'data': expense,'link':date})
