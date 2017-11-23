@@ -8,8 +8,8 @@ from django.views import View
 from django.views.generic.edit import FormView
 from django.db import IntegrityError
 from django.utils.dateformat import format
-import datetime
-
+import os
+from  .models import Profile
 
 def home(request):
     args = {'name': url_lock('home')}
@@ -25,8 +25,35 @@ def mess(request):
 
 
 def allocation(request):
-    args = {'name': url_lock('alloc')}
-    return render(request, 'mhsite/allocation.html')
+    if request.method == 'POST':
+        pwd = os.path.dirname(__file__)
+        file = open(pwd + '/students.csv')
+        data = file.readlines()
+        file.close()
+        students = []
+        Profile.objects.filter().delete()
+        for row in data:
+            a = row.split(',')
+            students.append(a)
+        students.pop(0)
+        for x in students:
+            p = Profile(admission_number=x[0], name=x[1], e_mail=x[2])
+            p.save()
+
+        return redirect('/')
+
+    else:
+        pwd = os.path.dirname(__file__)
+        file = open(pwd + '/students.csv')
+        data = file.readlines()
+        file.close()
+        students = []
+        for row in data:
+            a = row.split(',')
+            students.append(a)
+        students.pop(0)
+        args = {'name': url_lock('alloc'), 'data':students}
+        return render(request, 'mhsite/allocation.html', args)
 
 
 def loginf(request):
@@ -74,10 +101,8 @@ def application(request):
 def registration(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-
-        if form.is_valid():
-            admission_number = (form.cleaned_data['admission_number'])
-            if Application.objects.get(admission_number=admission_number).status:
+        if Profile.objects.filter(admission_number=form['admission_number']):
+            if form.is_valid():
                 form.save()
                 return redirect('/')
             else:
