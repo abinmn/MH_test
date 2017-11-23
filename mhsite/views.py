@@ -97,22 +97,15 @@ def application(request):
     else:
         return render(request, 'mhsite/application.html', args)
 
-
+#error for registration pending
 def registration(request):
     if request.method == 'POST':
+
         form = RegistrationForm(request.POST)
-        if Profile.objects.filter(admission_number=form['admission_number']):
-            if form.is_valid():
+        if form.is_valid():
+            if Profile.objects.filter(admission_number=form.cleaned_data.get('admission_number')).exists():
                 form.save()
                 return redirect('/')
-            else:
-                print ("Application not approved yet")
-                return render(request,'mhsite/application_status.html')
-
-        else:
-            print(form.errors)
-            args = {'form': form, 'name': url_lock('reg')}
-            return render(request, 'mhsite/application.html', args)
 
     else:
         form = RegistrationForm()
