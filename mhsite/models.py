@@ -28,7 +28,12 @@ class Application(models.Model):
         return self.first_name+" "+self.last_name
 
 class Profile(models.Model):
-    pass
+    admission_number =  models.CharField(max_length=7, default='1234/17')
+    name = models.CharField(max_length=100, default='Name')
+    e_mail = models.CharField(max_length=100, default='E-mail')
+
+    def __str__(self):
+        return self.name
 
 
 class Expense(models.Model):
