@@ -109,6 +109,14 @@ def registration(request):
             if Profile.objects.filter(admission_number=form.cleaned_data.get('admission_number')).exists():
                 form.save()
                 return redirect('/')
+            else:
+                args = {'forms':form,'admission_error':True}
+                return render(request, 'mhsite/registration.html', args)
+
+        else:
+            print ('error')
+            args = {'forms':form}
+            return render(request, 'mhsite/registration.html', args)
 
     else:
         form = RegistrationForm()
