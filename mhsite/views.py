@@ -3,18 +3,14 @@ from django.shortcuts import render,redirect
 from mhsite.forms import RegistrationForm,ApplicationForm,ExpenseForm,ReportForm,MessCutForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from mhsite.models import Application,Expense,MessCut
+from mhsite.models import Application,Expense,MessCut, Profile
 from django.views import View
 from django.views.generic.edit import FormView
 from django.db import IntegrityError
 from django.utils.dateformat import format
-<<<<<<< HEAD
 from datetime import date, timedelta
-import json
-=======
-import os
-from  .models import Profile
->>>>>>> 4ab06654bd0f5ca5d6bd76723530be0f745e9d20
+import json, os
+
 
 def home(request):
     args = {'name': url_lock('home')}
