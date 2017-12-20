@@ -8,7 +8,7 @@ from django.views import View
 from django.views.generic.edit import FormView
 from django.db import IntegrityError
 from django.utils.dateformat import format
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import json, os
 
 
@@ -38,7 +38,7 @@ def allocation(request):
             students.append(a)
         students.pop(0)
         for x in students:
-            p = Profile(admission_number=x[0], name=x[1], e_mail=x[2])
+            p = Profile(admission_number=x[0], name=x[1], email=x[2][:-1])
             p.save()
 
         return redirect('/')
@@ -132,13 +132,17 @@ def url_lock(page):
         return index
     return index
 
-def date_gen(dict,start_date,end_date):
+#mess cut data generation function
+def date_gen(lst,start_date,end_date,obj):
     delta = end_date - start_date
     for i in range(delta.days+1):
-        dict[str(start_date + timedelta(days=i))]=False
+        lst['processing'].append(str(start_date + timedelta(days=i)))
 
-    return dict
+    seen = set()
+    seen_add = seen.add
+    lst['processing'] = [x for x in lst['processing'] if not (x in seen or seen_add(x))]
 
+    return lst
 
 def mess_cut(request):
     if request.method=='POST':
@@ -149,20 +153,25 @@ def mess_cut(request):
             start_date=form.cleaned_data['start_date']
             end_date=form.cleaned_data['end_date']
             try:
-                print (1)
-                obj=MessCut.objects.get(email=email)
 
-                date_list=json.loads(obj.mess_cut_dates)
-                date_list=(date_gen(date_list,start_date,end_date))
+                obj = MessCut.objects.get(email=email)
+                date_list = json.loads(obj.mess_cut_dates)
+
+                date_list=(date_gen(date_list,start_date,end_date,obj))
+
                 date_list = (json.dumps(date_list))
+
                 obj.mess_cut_dates=date_list
+                obj.applied_date =  datetime.now().timestamp()
+
                 obj.save()
             except:
-                print (2)
-                date_list = (date_gen({},start_date,end_date))
+
+                date_list = (date_gen({'processing':[]},start_date,end_date,obj))
                 date_list = json.dumps(date_list)
-                obj = MessCut(email=email, mess_cut_dates=date_list)
+                obj = MessCut(email=email, mess_cut_dates=date_list, applied_date =  datetime.now().timestamp())
                 obj.save()
+
 
             return redirect('/')
         else:
@@ -172,6 +181,87 @@ def mess_cut(request):
         form = MessCutForm()
         args={'form':form}
         return render(request,'mhsite/mess_cut.html',args)
+
+def processing(request):
+    rows = MessCut.objects.all()
+    res = []
+    for row in rows:
+        profile = Profile.objects.get(email=row.email)
+        name = profile.name
+        mid = MessCut.objects.get(email=row.email).id
+        room_number = profile.room_number #Complete after finishing profile
+
+        data = json.loads(row.mess_cut_dates)
+        timestamp = float(MessCut.objects.get(email=row.email).applied_date)
+        applied_date = datetime.fromtimestamp(timestamp).strftime("%A, %d-%m-%Y")
+
+        if len(data['processing']) > 0:
+            res.append([name,room_number,applied_date,mid])
+
+    args = {'data':res}
+    return render(request,'mhsite/mess_cut_processing.html', args)
+
+def approval(request,mess_id):
+    mess = MessCut.objects.get(id=mess_id)
+    mess_data = json.loads(mess.mess_cut_dates)
+    dates = mess_data['processing']
+
+    profile_data = Profile.objects.get(email=mess.email)
+    profile = {'name':profile_data.name, 'room_number':profile_data.room_number, 'mobile':profile_data.phone}
+
+    args = {'dates':dates, 'profile':profile}
+    return render(request,'mhsite/verify.html', args)
+
+#Final processing of mess data
+def final(request, mess_id):
+    mess = MessCut.objects.get(id=mess_id)
+    mess_data = json.loads(mess.mess_cut_dates)
+    dates = mess_data['processing']
+    approved_dates = []
+    rejected_dates = []
+
+    for date in dates:
+        try:
+
+            choice = request.POST[date]
+            if choice == '1':
+                approved_dates.append(date)
+            elif choice == '0':
+                rejected_dates.append(date)
+        except:
+            pass
+
+    mess_data['processing'] = [date for date in dates if (date not in approved_dates) and (date not in rejected_dates)]
+
+    def date_data(x_date,dates):
+        for date in dates:
+            dateobject = datetime.strptime(date, '%Y-%m-%d')
+
+            if str(dateobject.year) not in x_date:
+                x_date[str(dateobject.year)] = {}
+
+            if str(dateobject.month) not in x_date[str(dateobject.year)]:
+                x_date[str(dateobject.year)][str(dateobject.month)] = []
+
+            x_date[str(dateobject.year)][str(dateobject.month)].append(date)
+
+        return x_date
+
+
+    dic_approved_dates = (date_data(json.loads(mess.approved_dates),approved_dates))
+    dic_rejected_dates = (date_data(json.loads(mess.rejected_dates),rejected_dates))
+
+
+    mess.mess_cut_dates = json.dumps(mess_data)
+    mess.approved_dates = json.dumps(dic_approved_dates)
+    mess.rejected_dates = json.dumps(dic_rejected_dates)
+    mess.process_date = datetime.now().timestamp()
+
+    mess.save()
+
+    #print ('approved', approved_dates, 'rejected', rejected_dates)
+    return redirect('/')
+
 
 def expense(request,year,month,day):
     date=(year+'-'+month+'-'+day)
@@ -187,7 +277,7 @@ def expense(request,year,month,day):
 
             try:
                 form.save()
-                return redirect('report'+'/'+date)
+                return redirect('/report'+'/'+date)
 
             except IntegrityError as e:
 

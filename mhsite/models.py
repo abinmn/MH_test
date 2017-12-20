@@ -30,7 +30,10 @@ class Application(models.Model):
 class Profile(models.Model):
     admission_number =  models.CharField(max_length=7, default='1234/17')
     name = models.CharField(max_length=100, default='Name')
-    e_mail = models.CharField(max_length=100, default='E-mail')
+    #email = models.CharField(max_length=100, default='E-mail')
+    email = models.EmailField()
+    room_number = models.IntegerField(default=0)
+    phone=models.CharField(max_length=10,validators=[RegexValidator(regex=r'[0-9]{10}',message='Invalid mobile number')])
 
     def __str__(self):
         return self.name
@@ -60,7 +63,10 @@ class Expense(models.Model):
 
 class MessCut(models.Model):
     email=models.EmailField(unique=True)
-    mess_cut_dates=models.CharField(max_length=100000)
-
+    mess_cut_dates = models.CharField(max_length=100000)
+    approved_dates = models.CharField(max_length=100000, default='{}')
+    rejected_dates = models.CharField(max_length=100000, default='{}')
+    applied_date = models.CharField(max_length=100000, null = True)
+    process_date = models.CharField(max_length=100000, null = True)
     def __str__(self):
         return self.email
