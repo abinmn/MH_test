@@ -2,10 +2,75 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b6f0b047-1f3e-4d24-85a0-2697a03d7331" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mhsite/.~lock.students.csv#" afterPath="$PROJECT_DIR$/mhsite/.~lock.students.csv#" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mhsite/students.csv" afterPath="$PROJECT_DIR$/mhsite/students.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mhsite/views.py" afterPath="$PROJECT_DIR$/mhsite/views.py" />
+      <change beforePath="$PROJECT_DIR$/.idea/MH_test.iml" afterPath="$PROJECT_DIR$/.idea/MH_test.iml" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
+      <change beforePath="$PROJECT_DIR$/mh_test/__init__.py" afterPath="$PROJECT_DIR$/mh_test/__init__.py" />
+      <change beforePath="$PROJECT_DIR$/mh_test/settings.py" afterPath="$PROJECT_DIR$/mh_test/settings.py" />
+      <change beforePath="$PROJECT_DIR$/mh_test/urls.py" afterPath="$PROJECT_DIR$/mh_test/urls.py" />
+      <change beforePath="$PROJECT_DIR$/mh_test/wsgi.py" afterPath="$PROJECT_DIR$/mh_test/wsgi.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/.~lock.students.csv#" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/mhsite/__init__.py" afterPath="$PROJECT_DIR$/mhsite/__init__.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/admin.py" afterPath="$PROJECT_DIR$/mhsite/admin.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/apps.py" afterPath="$PROJECT_DIR$/mhsite/apps.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/forms.py" afterPath="$PROJECT_DIR$/mhsite/forms.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/mhsite/migrations/0001_initial.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/migrations/0002_auto_20171010_1802.py" afterPath="$PROJECT_DIR$/mhsite/migrations/0002_auto_20171010_1802.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/migrations/0003_auto_20171104_1825.py" afterPath="$PROJECT_DIR$/mhsite/migrations/0003_auto_20171104_1825.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/migrations/0004_expense.py" afterPath="$PROJECT_DIR$/mhsite/migrations/0004_expense.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/migrations/0005_expense_month.py" afterPath="$PROJECT_DIR$/mhsite/migrations/0005_expense_month.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/migrations/0006_auto_20171105_0928.py" afterPath="$PROJECT_DIR$/mhsite/migrations/0006_auto_20171105_0928.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/migrations/0007_auto_20171105_1239.py" afterPath="$PROJECT_DIR$/mhsite/migrations/0007_auto_20171105_1239.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/migrations/0008_auto_20171106_2135.py" afterPath="$PROJECT_DIR$/mhsite/migrations/0008_auto_20171106_2135.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/migrations/0009_auto_20171123_2222.py" afterPath="$PROJECT_DIR$/mhsite/migrations/0009_auto_20171123_2222.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/migrations/__init__.py" afterPath="$PROJECT_DIR$/mhsite/migrations/__init__.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/models.py" afterPath="$PROJECT_DIR$/mhsite/models.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album1/mh.jpg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album1/mh.jpg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album1/mh2.jpg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album1/mh2.jpg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album1/thumb.jpg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album1/thumb.jpg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album2/college.jpg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album2/college.jpg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album2/college2.jpg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album2/college2.jpg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album2/thumb.jpg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album2/thumb.jpg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album3/model.jpeg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album3/model.jpeg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album3/model2.jpeg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album3/model2.jpeg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album3/thumb.jpeg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/album3/thumb.jpeg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/images.json" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/gallery/images.json" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/mess.jpg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/mess.jpg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/mh-dark.jpg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/mh-dark.jpg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/assets/mh.jpg" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/assets/mh.jpg" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/css/index.css" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/css/index.css" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/css/materialize.min.css" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/css/materialize.min.css" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Bold.woff" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Bold.woff" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Bold.woff2" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Bold.woff2" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Light.woff" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Light.woff" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Light.woff2" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Light.woff2" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Medium.woff" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Medium.woff" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Medium.woff2" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Medium.woff2" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Regular.woff" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Regular.woff" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Regular.woff2" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Regular.woff2" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Thin.woff" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Thin.woff" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Thin.woff2" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/fonts/roboto/Roboto-Thin.woff2" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/js/index.js" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/js/index.js" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/js/jquery-3.2.1.min.js" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/js/jquery-3.2.1.min.js" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/js/loadimages.js" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/js/loadimages.js" />
+      <change beforePath="$PROJECT_DIR$/mhsite/static/mhsite/js/materialize.min.js" afterPath="$PROJECT_DIR$/mhsite/static/mhsite/js/materialize.min.js" />
+      <change beforePath="$PROJECT_DIR$/mhsite/students.csv" afterPath="$PROJECT_DIR$/mhsite/students.csv" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/base.html" afterPath="$PROJECT_DIR$/mhsite/templates/base.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/allocation.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/allocation.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/application.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/application.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/expense_tracker.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/expense_tracker.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/gallery.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/gallery.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/index.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/index.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/login.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/login.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/logout.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/logout.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/messlogout.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/messlogout.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/registration.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/registration.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/report.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/report.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/templates/mhsite/report_details.html" afterPath="$PROJECT_DIR$/mhsite/templates/mhsite/report_details.html" />
+      <change beforePath="$PROJECT_DIR$/mhsite/tests.py" afterPath="$PROJECT_DIR$/mhsite/tests.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/urls.py" afterPath="$PROJECT_DIR$/mhsite/urls.py" />
+      <change beforePath="$PROJECT_DIR$/mhsite/views.py" afterPath="$PROJECT_DIR$/mhsite/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,8 +84,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mhsite/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="99" column="31" lean-forward="false" selection-start-line="99" selection-start-column="31" selection-end-line="99" selection-end-column="31" />
+            <state relative-caret-position="1037">
+              <caret line="47" column="32" lean-forward="false" selection-start-line="47" selection-start-column="32" selection-end-line="47" selection-end-column="32" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -31,7 +96,7 @@
       <file leaf-file-name="registration.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mhsite/templates/mhsite/registration.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
+            <state relative-caret-position="252">
               <caret line="9" column="32" lean-forward="false" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
               <folding />
             </state>
@@ -41,11 +106,9 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mhsite/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
+            <state relative-caret-position="420">
               <caret line="17" column="1" lean-forward="false" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
-              <folding>
-                <marker date="1511461018346" expanded="true" signature="859:860" ph="..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -53,9 +116,11 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mhsite/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="30" column="20" lean-forward="false" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="20" />
-              <folding />
+            <state relative-caret-position="644">
+              <caret line="27" column="20" lean-forward="false" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="20" />
+              <folding>
+                <marker date="1513780713260" expanded="true" signature="1568:1572" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -63,8 +128,8 @@
       <file leaf-file-name="forms.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mhsite/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-150">
-              <caret line="22" column="20" lean-forward="true" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="20" />
+            <state relative-caret-position="420">
+              <caret line="22" column="20" lean-forward="false" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -73,7 +138,7 @@
       <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mhsite/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
+            <state relative-caret-position="84">
               <caret line="3" column="32" lean-forward="false" selection-start-line="3" selection-start-column="32" selection-end-line="4" selection-end-column="32" />
               <folding />
             </state>
@@ -83,8 +148,8 @@
       <file leaf-file-name="application.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mhsite/templates/mhsite/application.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="8" column="48" lean-forward="false" selection-start-line="8" selection-start-column="48" selection-end-line="9" selection-end-column="32" />
+            <state relative-caret-position="224">
+              <caret line="8" column="48" lean-forward="false" selection-start-line="8" selection-start-column="48" selection-end-line="9" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -93,7 +158,7 @@
       <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mh_test/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
+            <state relative-caret-position="336">
               <caret line="12" column="9" lean-forward="false" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
               <folding />
             </state>
@@ -135,7 +200,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-79" />
     <option name="y" value="24" />
     <option name="width" value="1281" />
@@ -203,15 +268,15 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="ignore_missing_gitignore" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -233,6 +298,9 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="b6f0b047-1f3e-4d24-85a0-2697a03d7331" name="Default" comment="" />
@@ -244,37 +312,26 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1366" height="743" extended-state="6" />
+    <frame x="-79" y="24" width="1922" height="1086" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16398244" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16302083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31023622" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3103082" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31023622" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16325037" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -519,13 +576,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/django/contrib/auth/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-450">
-          <caret line="108" column="8" lean-forward="false" selection-start-line="108" selection-start-column="8" selection-end-line="108" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/django/contrib/auth/forms.py" />
     <entry file="file://$PROJECT_DIR$/mhsite/templates/mhsite/login.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -558,7 +609,7 @@
     <entry file="file://$PROJECT_DIR$/mhsite/templates/mhsite/messlogout.html" />
     <entry file="file://$PROJECT_DIR$/mh_test/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
+        <state relative-caret-position="336">
           <caret line="12" column="9" lean-forward="false" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
           <folding />
         </state>
@@ -566,7 +617,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mhsite/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
+        <state relative-caret-position="84">
           <caret line="3" column="32" lean-forward="false" selection-start-line="3" selection-start-column="32" selection-end-line="4" selection-end-column="32" />
           <folding />
         </state>
@@ -574,8 +625,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mhsite/templates/mhsite/application.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="48" lean-forward="false" selection-start-line="8" selection-start-column="48" selection-end-line="9" selection-end-column="32" />
+        <state relative-caret-position="224">
+          <caret line="8" column="48" lean-forward="false" selection-start-line="8" selection-start-column="48" selection-end-line="9" selection-end-column="12" />
           <folding />
         </state>
       </provider>
@@ -583,33 +634,33 @@
     <entry file="file://$PROJECT_DIR$/mhsite/templates/mhsite/allocation.html" />
     <entry file="file://$PROJECT_DIR$/mhsite/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="30" column="20" lean-forward="false" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="20" />
-          <folding />
+        <state relative-caret-position="644">
+          <caret line="27" column="20" lean-forward="false" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="20" />
+          <folding>
+            <marker date="1513780713260" expanded="true" signature="1568:1572" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mhsite/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-150">
-          <caret line="22" column="20" lean-forward="true" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="20" />
+        <state relative-caret-position="420">
+          <caret line="22" column="20" lean-forward="false" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mhsite/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
+        <state relative-caret-position="420">
           <caret line="17" column="1" lean-forward="false" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
-          <folding>
-            <marker date="1511461018346" expanded="true" signature="859:860" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mhsite/templates/mhsite/registration.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
+        <state relative-caret-position="252">
           <caret line="9" column="32" lean-forward="false" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
           <folding />
         </state>
@@ -617,8 +668,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mhsite/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="99" column="31" lean-forward="false" selection-start-line="99" selection-start-column="31" selection-end-line="99" selection-end-column="31" />
+        <state relative-caret-position="1037">
+          <caret line="47" column="32" lean-forward="false" selection-start-line="47" selection-start-column="32" selection-end-line="47" selection-end-column="32" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
