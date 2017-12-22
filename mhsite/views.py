@@ -1,9 +1,9 @@
 from __future__ import unicode_literals
-from django.shortcuts import render,redirect
-from mhsite.forms import RegistrationForm,ApplicationForm,ExpenseForm,ReportForm
+from django.shortcuts import render, redirect
+from mhsite.forms import RegistrationForm, ApplicationForm, ExpenseForm, ReportForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from mhsite.models import Application,Expense
+from mhsite.models import Application, Expense
 from django.views import View
 from django.views.generic.edit import FormView
 from django.db import IntegrityError
@@ -35,9 +35,9 @@ def studentlist():
     data = file.readlines()
     file.close()
     students = []
-    Profile.objects.filter().delete()
     for row in data:
         a = row.split(',')
+        a[3] = a[3].replace('\n', '')
         students.append(a)
     students.pop(0)
     return students
@@ -46,15 +46,16 @@ def studentlist():
 def allocation(request):
     if request.method == 'POST':
         students = studentlist()
+        Profile.objects.filter().delete()
         for x in students:
-            p = Profile(admission_number=x[0], fname=x[1], lname=x[2], e_mail=x[3])
+            p = Profile(admission_number=x[0], fname=x[1], lname=x[2], email=x[3])
             p.save()
 
         return redirect('/')
 
     else:
         students = studentlist()
-        args = {'name': url_lock('alloc'), 'data':students}
+        args = {'name': url_lock('alloc'), 'data': students}
         return render(request, 'mhsite/allocation.html', args)
 
 
@@ -82,6 +83,10 @@ def logoutf(request):
     return render(request, 'mhsite/logout.html')
 
 
+def students():
+    pass
+
+
 def application(request):
     form = ApplicationForm()
     args = {'form': form, 'name': url_lock('application')}
@@ -96,13 +101,13 @@ def application(request):
             return render(request, 'mhsite/application.html', args)
     else:
         students = studentlist()
-        user = middleware.get_current_user()
+        user = request.user.username
         users = ''
         for x in students:
             if x[3] == user:
                 users = x
         if users is not None:
-            args = {'form': form, 'name': url_lock('application'), 'user':users}
+            args = {'form': form, 'name': url_lock('application'), 'user': users}
             return render(request, 'mhsite/application.html', args)
 
 
@@ -116,16 +121,16 @@ def registration(request):
         if form.is_valid():
             if Profile.objects.filter(admission_number=form.cleaned_data.get('admission_number')).exists():
                 if User.objects.filter(username=form.cleaned_data.get('email')).exists():
-                    return render(request, 'mhsite/regerror.html')
+                    args = {'error':'User already exist'}
+                    return render(request, 'mhsite/regerror.html', args)
                 else:
                     form.save()
                     return redirect('/')
 
             else:
-                return render(request, 'mhsite/regerror.html')
-        
-        else:
-            return render(request, 'mhsite/regerror.html')
+                args = {'error': 'You are not selected'}
+                return render(request, 'mhsite/regerror.html', args)
+
 
     else:
         form = RegistrationForm()
@@ -134,8 +139,8 @@ def registration(request):
 
 
 def url_lock(page):
-    index = [''  for x in range(9)]
-    pages = ['home','gallery','student','mess','contact','log', 'alloc', 'application','reg']
+    index = ['' for x in range(9)]
+    pages = ['home', 'gallery', 'student', 'mess', 'contact', 'log', 'alloc', 'application', 'reg']
     if page in pages:
         i = pages.index(page)
         index[i] = 'active'
@@ -143,28 +148,28 @@ def url_lock(page):
     return index
 
 
-def expense(request,year,month,day):
-    date=(year+'-'+month+'-'+day)
+def expense(request, year, month, day):
+    date = (year + '-' + month + '-' + day)
 
-    if request.method=='POST':
+    if request.method == 'POST':
         try:
             expense = Expense.objects.get(date=date)
-            form=ExpenseForm(request.POST,instance=expense)
+            form = ExpenseForm(request.POST, instance=expense)
 
         except Expense.DoesNotExist:
-            form=ExpenseForm(request.POST)
+            form = ExpenseForm(request.POST)
 
         if form.is_valid():
 
             try:
                 form.save()
-                return redirect('report'+'/'+date)
+                return redirect('report' + '/' + date)
 
             except IntegrityError as e:
 
                 return render(request, 'mhsite/expense_tracker.html', args)
         else:
-            args={'form':form}
+            args = {'form': form}
             return render(request, 'mhsite/expense_tracker.html', args)
 
 
@@ -176,9 +181,9 @@ def expense(request,year,month,day):
             return render(request, 'mhsite/expense_tracker.html', args)
 
         except Expense.DoesNotExist:
-            form=ExpenseForm(initial={'date':date})
+            form = ExpenseForm(initial={'date': date})
             args = {'form': form}
-            return render(request, 'mhsite/expense_tracker.html',args)
+            return render(request, 'mhsite/expense_tracker.html', args)
 
 
 class Report(FormView):
@@ -195,10 +200,10 @@ class Report(FormView):
 
 class ReportDetails(View):
     def get(self, request, year, month, day):
-        date=(year+'-'+month+'-'+day)
+        date = (year + '-' + month + '-' + day)
         try:
-            expense=Expense.objects.get(date=date)
-            return render(request, 'mhsite/report_details.html', {'data': expense,'link':date})
+            expense = Expense.objects.get(date=date)
+            return render(request, 'mhsite/report_details.html', {'data': expense, 'link': date})
 
         except Expense.DoesNotExist:
-            return redirect('expense',year,month,day)
+            return redirect('expense', year, month, day)
