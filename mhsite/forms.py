@@ -22,25 +22,18 @@ class RegistrationForm(UserCreationForm):
     admission_number = forms.CharField(max_length=7, validators=[
         RegexValidator(regex=r'^[0-9]{4}/[0-9]{2}$', message='The format for admission number is 1234/17')],
                                        help_text='1234/17')
-    email = forms.EmailField(required=True)
-    first_name = forms.CharField(max_length=100, required=False)
 
     class Meta:
         model = User
 
         fields = (
             'admission_number',
-            'first_name',
-            'last_name',
             'email',
             'password1',
             'password2',
         )
-
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=False)
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
         user.username = self.cleaned_data['email']
         user.email = self.cleaned_data['email']
         user.password1 = self.cleaned_data['password1']

@@ -116,25 +116,23 @@ def application(request):
 
 def registration(request):
     if request.method == 'POST':
-
         form = RegistrationForm(request.POST)
         if form.is_valid():
             if Profile.objects.filter(admission_number=form.cleaned_data.get('admission_number')).exists():
                 if User.objects.filter(username=form.cleaned_data.get('email')).exists():
-                    args = {'error':'User already exist'}
+                    args = {'name': url_lock('home'), 'error':'User already exist'}
                     return render(request, 'mhsite/regerror.html', args)
                 else:
                     form.save()
                     return redirect('/')
 
             else:
-                args = {'error': 'You are not selected'}
+                args = {'name': url_lock('home'), 'error': 'You are not selected'}
                 return render(request, 'mhsite/regerror.html', args)
-
 
     else:
         form = RegistrationForm()
-        args = {'forms': form, 'name': url_lock('reg')}
+        args = {'forms':form}
         return render(request, 'mhsite/registration.html', args)
 
 
