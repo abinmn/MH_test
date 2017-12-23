@@ -48,7 +48,7 @@ def allocation(request):
         students = studentlist()
         Profile.objects.filter().delete()
         for x in students:
-            p = Profile(admission_number=x[0], fname=x[1], lname=x[2], email=x[3][:-1])
+            p = Profile(admission_number=x[0], fname=x[1], lname=x[2], email=x[3])
             p.save()
 
         return redirect('/')
@@ -236,8 +236,9 @@ def processing(request):
     rows = MessCut.objects.all()
     res = []
     for row in rows:
+        a =  Profile.objects.all()[0].email
         profile = Profile.objects.get(email=row.email)
-        name = profile.name
+        name = profile.fname + " " + profile.lname
         mid = MessCut.objects.get(email=row.email).id
         room_number = profile.room_number #Complete after finishing profile
 
@@ -257,7 +258,7 @@ def approval(request,mess_id):
     dates = mess_data['processing']
 
     profile_data = Profile.objects.get(email=mess.email)
-    profile = {'name':profile_data.name, 'room_number':profile_data.room_number, 'mobile':profile_data.phone}
+    profile = {'name':profile_data.fname + profile_data.lname, 'room_number':profile_data.room_number, 'mobile':profile_data.phone}
 
     args = {'dates':dates, 'profile':profile}
     return render(request,'mhsite/verify.html', args)
