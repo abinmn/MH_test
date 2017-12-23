@@ -1,43 +1,44 @@
 {% extends 'base.html' %}
+
 {% block body %}
-<div class='container'>
-    <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
-        <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Expense</h3>
+    <div class='container'>
+        <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
+            <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Report</h3>
+            <div class='row col s12'>
+                <table bgcolor="#ccc" style="border-radius:10px;" class="striped highlight offset-s2 responsive-table col s8">
+                    <thead>
+                      <tr>
+                          <th>Item</th>
+                          <th>Price</th>
+                      </tr>
+                    </thead>
 
-        <div class="row"
-          <ul>
-
-          <div class="col 16" >
-            <li>Report for {{data.date}}</li>
-          </div>
-            <li>Item1 {{data.item1}}</li>
-            <li>Item2 {{data.item2}}</li>
-            <li>Item3 {{data.item3}}</li>
-            <li>Item4 {{data.item4}}</li>
-            <li>Item5 {{data.item5}}</li>
-            <li>Total {{data.total}}</li>
-          </ul>
-
-          <a href="/expense_tracker/{{link}}">Edit</a>
+                    <tbody>
+                    <tr>
+                      <td>Item1</td><td>{{data.item1}}</td>
+                    </tr>
+                    <tr>
+                      <td>Item2</td><td>{{data.item2}}</td>
+                    </tr>
+                    <tr>
+                      <td>Item3</td><td>{{data.item3}}</td>
+                    </tr>
+                    <tr>
+                      <td>Item4</td><td>{{data.item4}}</td>
+                    </tr>
+                    <tr>
+                      <td>Item5</td><td>{{data.item5}}</td>
+                    </tr>
+                    <tr>
+                      <td>Total</td><td>{{data.total}}</td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><a class="col offset-s2 s8 waves-effect waves-light btn green"  href="/expense_tracker/{{link}}">Edit</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
     </div>
-</div>
 
-<div class="row"
-  <ul>
-
-  <div class="col 16" >
-    <li>Report for {{data.date}}</li>
-  </div>
-    <li>Item1 {{data.item1}}</li>
-    <li>Item2 {{data.item2}}</li>
-    <li>Item3 {{data.item3}}</li>
-    <li>Item4 {{data.item4}}</li>
-    <li>Item5 {{data.item5}}</li>
-    <li>Total {{data.total}}</li>
-  </ul>
-
-  <a href="/expense_tracker/{{link}}">Edit</a>
-</div>
 {% endblock %}

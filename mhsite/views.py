@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 from django.shortcuts import render,redirect
 from mhsite.forms import RegistrationForm,ApplicationForm,ExpenseForm,ReportForm,MessCutForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from mhsite import middleware
 from django.contrib.auth.forms import AuthenticationForm
 from mhsite.models import Application,Expense,MessCut, Profile
 from django.views import View
@@ -16,44 +18,44 @@ def home(request):
     args = {'name': url_lock('home')}
     return render(request, 'mhsite/index.html', args)
 
+
 def gallery(request):
     args = {'name': url_lock('gallery')}
     return render(request, 'mhsite/gallery.html', args)
+
 
 def mess(request):
     args = {'name': url_lock('mess')}
     return render(request, 'mhsite/messlogout.html', args)
 
 
+def studentlist():
+    pwd = os.path.dirname(__file__)
+    file = open(pwd + '/students.csv')
+    data = file.readlines()
+    file.close()
+    students = []
+    for row in data:
+        a = row.split(',')
+        a[3] = a[3].replace('\n', '')
+        students.append(a)
+    students.pop(0)
+    return students
+
+
 def allocation(request):
     if request.method == 'POST':
-        pwd = os.path.dirname(__file__)
-        file = open(pwd + '/students.csv')
-        data = file.readlines()
-        file.close()
-        students = []
+        students = studentlist()
         Profile.objects.filter().delete()
-        for row in data:
-            a = row.split(',')
-            students.append(a)
-        students.pop(0)
         for x in students:
-            p = Profile(admission_number=x[0], name=x[1], email=x[2][:-1])
+            p = Profile(admission_number=x[0], fname=x[1], lname=x[2], email=x[3][:-1])
             p.save()
 
         return redirect('/')
 
     else:
-        pwd = os.path.dirname(__file__)
-        file = open(pwd + '/students.csv')
-        data = file.readlines()
-        file.close()
-        students = []
-        for row in data:
-            a = row.split(',')
-            students.append(a)
-        students.pop(0)
-        args = {'name': url_lock('alloc'), 'data':students}
+        students = studentlist()
+        args = {'name': url_lock('alloc'), 'data': students}
         return render(request, 'mhsite/allocation.html', args)
 
 
@@ -82,14 +84,16 @@ def logoutf(request):
     return render(request, 'mhsite/logout.html')
 
 
+def students():
+    pass
+
+
 def application(request):
 
     form = ApplicationForm()
     args = {'form': form, 'name': url_lock('application')}
     if request.method == 'POST':
         form = ApplicationForm(request.POST)
-
-
         if form.is_valid():
             form.save()
             return redirect('/')
@@ -98,34 +102,47 @@ def application(request):
             args = {'form': form, 'name': url_lock('application')}
             return render(request, 'mhsite/application.html', args)
     else:
-        return render(request, 'mhsite/application.html', args)
+        students = studentlist()
+        user = request.user.username
+        users = ''
+        for x in students:
+            if x[3] == user:
+                users = x
+        if users is not None:
+            args = {'form': form, 'name': url_lock('application'), 'user': users}
+            return render(request, 'mhsite/application.html', args)
 
-#error for registration pending
+
+# error for registration pending
+
+
 def registration(request):
     if request.method == 'POST':
 
         form = RegistrationForm(request.POST)
         if form.is_valid():
             if Profile.objects.filter(admission_number=form.cleaned_data.get('admission_number')).exists():
-                form.save()
-                return redirect('/')
-            else:
-                args = {'forms':form,'admission_error':True}
-                return render(request, 'mhsite/registration.html', args)
+                if User.objects.filter(username=form.cleaned_data.get('email')).exists():
+                    args = {'error':'User already exist'}
+                    return render(request, 'mhsite/regerror.html', args)
+                else:
+                    form.save()
+                    return redirect('/')
 
-        else:
-            print ('error')
-            args = {'forms':form}
-            return render(request, 'mhsite/registration.html', args)
+            else:
+                args = {'error': 'You are not selected'}
+                return render(request, 'mhsite/regerror.html', args)
+
 
     else:
         form = RegistrationForm()
         args = {'forms': form, 'name': url_lock('reg')}
         return render(request, 'mhsite/registration.html', args)
 
+
 def url_lock(page):
-    index = [''  for x in range(9)]
-    pages = ['home','gallery','student','mess','contact','log', 'alloc', 'application','reg']
+    index = ['' for x in range(9)]
+    pages = ['home', 'gallery', 'student', 'mess', 'contact', 'log', 'alloc', 'application', 'reg']
     if page in pages:
         i = pages.index(page)
         index[i] = 'active'
@@ -300,11 +317,11 @@ def expense(request,year,month,day):
     date=(year+'-'+month+'-'+day)
     if request.method=='POST':
         try:
-            expense=Expense.objects.get(date=date)
-            form=ExpenseForm(request.POST,instance=expense)
+            expense = Expense.objects.get(date=date)
+            form = ExpenseForm(request.POST, instance=expense)
 
         except Expense.DoesNotExist:
-            form=ExpenseForm(request.POST)
+            form = ExpenseForm(request.POST)
 
         if form.is_valid():
 
@@ -316,22 +333,22 @@ def expense(request,year,month,day):
 
                 return render(request, 'mhsite/expense_tracker.html', args)
         else:
-            args={'form':form}
+            args = {'form': form}
             return render(request, 'mhsite/expense_tracker.html', args)
 
 #edit/create expense
     else:
         #edit expense for a month
         try:
-            expense=Expense.objects.get(date=date)
-            form=ExpenseForm(instance=expense)
+            expense = Expense.objects.get(date=date)
+            form = ExpenseForm(instance=expense)
             args = {'form': form}
             return render(request, 'mhsite/expense_tracker.html', args)
         #create expense for a month
         except Expense.DoesNotExist:
-            form=ExpenseForm(initial={'date':date})
+            form = ExpenseForm(initial={'date': date})
             args = {'form': form}
-            return render(request, 'mhsite/expense_tracker.html',args)
+            return render(request, 'mhsite/expense_tracker.html', args)
 
 
 class Report(FormView):
@@ -345,13 +362,13 @@ class Report(FormView):
         day = '01'
         return redirect('report_details', year, month, day)
 
+
 class ReportDetails(View):
     def get(self, request, year, month, day):
-        date=(year+'-'+month+'-'+day)
-        #display expense of a month if it exist
+        date = (year + '-' + month + '-' + day)
         try:
-            expense=Expense.objects.get(date=date)
-            return render(request, 'mhsite/report_details.html', {'data': expense,'link':date})
+            expense = Expense.objects.get(date=date)
+            return render(request, 'mhsite/report_details.html', {'data': expense, 'link': date})
 
         except Expense.DoesNotExist:
-            return redirect('expense',year,month,day)
+            return redirect('expense', year, month, day)
