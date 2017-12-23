@@ -132,17 +132,42 @@ def url_lock(page):
         return index
     return index
 
-#mess cut data generation function
-def date_gen(lst,start_date,end_date,obj):
+#mess cut data generation function (supprot function for mess_cut)
+def date_gen(lst,start_date,end_date,objects=None):
     delta = end_date - start_date
     for i in range(delta.days+1):
         lst['processing'].append(str(start_date + timedelta(days=i)))
+
 
     seen = set()
     seen_add = seen.add
     lst['processing'] = [x for x in lst['processing'] if not (x in seen or seen_add(x))]
 
     return lst
+
+#support function for mess_cut
+def duplicate(date_list,date_type):
+    duplicate_dates = []
+    for date in date_list['processing']:
+        date_obj = datetime.strptime(date, '%Y-%m-%d')
+        year = str(date_obj.year)
+        month = str(date_obj.month)
+        if year in date_type:
+
+            if  month in date_type[year]:
+
+                if date in date_type[str(date_obj.year)][str(date_obj.month)]:
+                    duplicate_dates.append(date)
+
+                else:
+                    continue
+
+            else:
+                continue
+
+        else:
+            continue
+    return duplicate_dates
 
 def mess_cut(request):
     if request.method=='POST':
@@ -157,7 +182,13 @@ def mess_cut(request):
                 obj = MessCut.objects.get(email=email)
                 date_list = json.loads(obj.mess_cut_dates)
 
-                date_list=(date_gen(date_list,start_date,end_date,obj))
+                date_list=(date_gen(date_list,start_date,end_date))
+
+                approved_dates = json.loads(obj.approved_dates)
+                rejected_dates = json.loads(obj.rejected_dates)
+
+                duplicate_dates = duplicate(date_list,approved_dates) + duplicate(date_list,rejected_dates)
+                date_list['processing'] = [date for date in date_list['processing'] if date not in duplicate_dates]
 
                 date_list = (json.dumps(date_list))
 
@@ -165,9 +196,11 @@ def mess_cut(request):
                 obj.applied_date =  datetime.now().timestamp()
 
                 obj.save()
+
+                #return to new page
             except:
 
-                date_list = (date_gen({'processing':[]},start_date,end_date,obj))
+                date_list = (date_gen({'processing':[]},start_date,end_date))
                 date_list = json.dumps(date_list)
                 obj = MessCut(email=email, mess_cut_dates=date_list, applied_date =  datetime.now().timestamp())
                 obj.save()
