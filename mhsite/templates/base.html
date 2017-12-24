@@ -20,7 +20,7 @@
               <ul class="right hide-on-med-and-down web">
                 <li class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"><a href="/">Home</a></li>
                 <li class="{% if request.resolver_match.url_name == 'gallery' %}active{% endif %}"><a href="/gallery">Gallery</a></li>
-                <li class="{% if request.resolver_match.url_name == 'student' %}active{% endif %}"><a href="#">Student's corner</a></li>
+                <li class="{% if request.resolver_match.url_name == 'student' %}active{% endif %}"><a href="/studentscorner">Student's corner</a></li>
                 <li class="{% if request.resolver_match.url_name == 'mess' %}active{% endif %}"><a href="/mess">Mess</a></li>
                 <li class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}"><a href="#">Contacts</a></li>
                 <li class="{% if request.resolver_match.url_name == 'log' %}active{% endif %}">
@@ -50,7 +50,7 @@
         <ul id="slide-out" class="side-nav mobile">
             <li class='active'><a href="/" style='color:rgba(255,255,255,0.87);'>Home</a></li>
             <li><a href="/gallery" style='color:rgba(255,255,255,0.87);'>Gallery</a></li>
-            <li><a href="#" style='color:rgba(255,255,255,0.87);'>Student's corner</a></li>
+            <li><a href="/studentscorner" style='color:rgba(255,255,255,0.87);'>Student's corner</a></li>
             <li><a href="/mess" style='color:rgba(255,255,255,0.87);'>Mess</a></li>
             <li><a href="#" style='color:rgba(255,255,255,0.87);'>Contacts</a></li>
             <li class="{% if request.resolver_match.url_name == 'log' %}active{% endif %}">

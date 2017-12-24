@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from mhsite.forms import RegistrationForm, ApplicationForm, ExpenseForm, ReportForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from mhsite.models import Application, Expense
 from django.views import View
 from django.views.generic.edit import FormView
@@ -71,10 +71,22 @@ def loginf(request):
                 login(request, user)
                 return redirect('/')
         else:
-            args = {'form': form, 'error': True}
-            return render(request, 'mhsite/login.html', args)
+            args = {'name': url_lock('home'), 'error': 'Login Failed', 'erlink':'/login'}
+            return render(request, 'mhsite/regerror.html', args)
 
     return render(request, 'mhsite/login.html', args)
+
+
+def pwdreset(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/login')
+    else:
+        form = PasswordChangeForm(user=request.user)
+        args = {'form': form, 'name': url_lock('log')}
+        return render(request, 'mhsite/passwordreset.html', args)
 
 
 def logoutf(request):
@@ -83,8 +95,13 @@ def logoutf(request):
     return render(request, 'mhsite/logout.html')
 
 
-def students():
-    pass
+def students(request):
+    try:
+        details = Application.objects.get(e_mail=request.user.username)
+    except:
+        details =''
+    args = {'data':details}
+    return render(request, 'mhsite/studentscorner.html', args)
 
 
 def application(request):
@@ -120,14 +137,14 @@ def registration(request):
         if form.is_valid():
             if Profile.objects.filter(admission_number=form.cleaned_data.get('admission_number')).exists():
                 if User.objects.filter(username=form.cleaned_data.get('email')).exists():
-                    args = {'name': url_lock('home'), 'error':'User already exist'}
+                    args = {'name': url_lock('home'), 'error':'User already exist', 'erlink':'/register'}
                     return render(request, 'mhsite/regerror.html', args)
                 else:
                     form.save()
                     return redirect('/')
 
             else:
-                args = {'name': url_lock('home'), 'error': 'You are not selected'}
+                args = {'name': url_lock('home'), 'error': 'You are not selected', 'erlink':'/register'}
                 return render(request, 'mhsite/regerror.html', args)
         else:
             args = {'forms': form}
