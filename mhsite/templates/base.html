@@ -87,6 +87,18 @@
     <script type="text/javascript" src="{% static 'mhsite/js/jquery-3.2.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'mhsite/js/materialize.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'mhsite/js/index.js' %}"></script>
-
+    <script type="text/javascript" src="{% static 'mhsite/js/responsiveslides.js' %}"></script>
+    <script>
+    $(function () {
+      $("#slider").responsiveSlides({
+        auto: true,
+        pager: false,
+        nav: true,
+        speed: 2000,
+        maxwidth: 1000,
+        namespace: "centered-btns"
+      });
+    });
+    </script>
   </body>
 </html>

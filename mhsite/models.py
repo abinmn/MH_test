@@ -13,6 +13,7 @@ class Application(models.Model):
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)
     e_mail = models.CharField(max_length=100)
+    room_no = models.CharField(max_length=4)
     address=models.CharField(max_length=500)
     pincode=models.CharField(max_length=6,validators=[RegexValidator(regex=r'^[0-9]{6}$',message='Enter a valid pincode')])
     phone=models.CharField(max_length=10,validators=[RegexValidator(regex=r'[0-9]{10}',message='Invalid mobile number')])

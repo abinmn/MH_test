@@ -101,13 +101,13 @@ def application(request):
             return render(request, 'mhsite/application.html', args)
     else:
         students = studentlist()
-        user = request.user.username
+        usern = request.user.username
         users = ''
         for x in students:
-            if x[3] == user:
+            if x[3] == usern:
                 users = x
         if users is not None:
-            args = {'form': form, 'name': url_lock('application'), 'user': users}
+            args = {'form': form, 'name': url_lock('application'), 'usern': users}
             return render(request, 'mhsite/application.html', args)
 
 
@@ -129,6 +129,9 @@ def registration(request):
             else:
                 args = {'name': url_lock('home'), 'error': 'You are not selected'}
                 return render(request, 'mhsite/regerror.html', args)
+        else:
+            args = {'forms': form}
+            return render(request, 'mhsite/registration.html', args)
 
     else:
         form = RegistrationForm()

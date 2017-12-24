@@ -11,6 +11,7 @@ $(document).ready(function(){
         format:'yyyy-mm-dd',
         closeOnSelect: true // Close upon selecting a date,
       });
+
     //Used for responsive navbar
     $('.button-collapse').sideNav({
         menuWidth: 200,
