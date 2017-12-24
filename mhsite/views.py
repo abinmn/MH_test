@@ -83,6 +83,11 @@ def pwdreset(request):
         if form.is_valid():
             form.save()
             return redirect('/login')
+        else:
+            print(form.errors)
+            args = {'error':'Password reset failed', 'erlink':'/pwdreset'}
+            return render(request, 'mhsite/regerror.html', args)
+
     else:
         form = PasswordChangeForm(user=request.user)
         args = {'form': form, 'name': url_lock('log')}

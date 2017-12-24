@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from mhsite import views
-from django.contrib.auth.views import login
+from django.contrib.auth.views import login, password_reset, password_reset_done
 
 urlpatterns =[
     url(r'^$', views.home, name='home'),
