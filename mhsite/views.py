@@ -268,8 +268,8 @@ def processing(request, year=str(datetime.now().year), month=str(datetime.now().
     approved = []
     rejected = []
     for row in rows:
-        profile = Profile.objects.get(email=row.email)
-        name = profile.fname + " " + profile.lname
+        profile = Application.objects.get(email=row.email)
+        name = profile.first_name + " " + profile.last_name
         mid = MessCut.objects.get(email=row.email).id
         room_number = profile.room_number #Complete after finishing profile
         approved_dates = json.loads(MessCut.objects.get(pk=mid).approved_dates)
@@ -310,8 +310,8 @@ def approval(request,mess_id):
     mess_data = json.loads(mess.mess_cut_dates)
     dates = mess_data['processing']
 
-    profile_data = Profile.objects.get(email=mess.email)
-    profile = {'name':profile_data.fname + profile_data.lname, 'room_number':profile_data.room_number, 'mobile':profile_data.phone}
+    profile_data = Application.objects.get(email=mess.email)
+    profile = {'name':profile_data.first_name + profile_data.last_name, 'room_number':profile_data.room_number, 'mobile':profile_data.phone}
 
     args = {'dates':dates, 'profile':profile,}
     return render(request,'mhsite/verify.html', args)
