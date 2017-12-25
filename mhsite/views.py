@@ -11,7 +11,7 @@ from django.views.generic.edit import FormView
 from django.db import IntegrityError
 from django.utils.dateformat import format
 from datetime import date, timedelta, datetime
-import json, os
+import json, os, calendar
 
 
 def home(request):
@@ -233,6 +233,13 @@ def mess_cut(request):
         return render(request,'mhsite/mess_cut.html',args)
 
 def processing(request, year=str(datetime.now().year), month=str(datetime.now().month) ):
+
+
+    if request.method == 'POST':
+        year = request.POST['year']
+        month = str(datetime.strptime(request.POST['month'], '%B').month)
+
+
     rows = MessCut.objects.all().order_by('applied_date')
     res = []
     approved = []
@@ -257,7 +264,7 @@ def processing(request, year=str(datetime.now().year), month=str(datetime.now().
 
 
         if year in rejected_dates:
-            if month in approved_dates[year]:
+            if month in rejected_dates[year]:
                 rejected.append([name, room_number,len(rejected_dates[year][month]), mid])
 
 
@@ -265,7 +272,14 @@ def processing(request, year=str(datetime.now().year), month=str(datetime.now().
     if len(data['processing']) > 0:
         res.append([name,room_number,applied_date,mid])
 
-    args = {'data':res,'approved':approved, 'rejected':rejected}
+    years = [year for year in approved_dates]
+    dupe = [year for year in rejected_dates if year not in years]
+    if len(dupe)>0:
+        for year in dupe:
+            years.append(year)
+
+    cal = {'months':list(calendar.month_name), 'years':years, 'default':[year, datetime.strftime(datetime(2017,int(month),1),'%B')]}
+    args = {'data':res,'approved':approved, 'rejected':rejected, 'calendar':cal }
     return render(request,'mhsite/mess_cut_processing.html', args)
 
 def approval(request,mess_id):
@@ -330,6 +344,10 @@ def final(request, mess_id):
     return redirect('/')
 
 def edit(request,type, mess_id, year = datetime.now().year, month = datetime.now().month ) :
+
+    if month.isalpha():
+        month = datetime.strptime(month,"%B").month
+
     approved_dates = json.loads(MessCut.objects.get(id= mess_id).approved_dates)
     rejected_dates = json.loads(MessCut.objects.get(id= mess_id).rejected_dates)
 
@@ -343,6 +361,8 @@ def edit(request,type, mess_id, year = datetime.now().year, month = datetime.now
 
 def submit_edit(request, type, mess_id, year = datetime.now().year, month = datetime.now().month ):
     mess = MessCut.objects.get(id= mess_id)
+    if month.isalpha():
+        month = datetime.strptime(month,"%B").month
     approved_dates = json.loads(mess.approved_dates)
     rejected_dates = json.loads(mess.rejected_dates)
 
@@ -351,16 +371,34 @@ def submit_edit(request, type, mess_id, year = datetime.now().year, month = date
         for date in dates:
             if dates[date] == '0':
                 approved_dates[str(year)][str(month)].remove(date)
-                rejected_dates[str(year)][str(month)].append(date)
 
+                if year in rejected_dates:
+                    if month in rejected_dates[year]:
+                        rejected_dates[str(year)][str(month)].append(date)
+                    else:
+                        rejected_dates[str(year)][str(month)] = []
+                        rejected_dates[str(year)][str(month)].append(date)
+                else:
+                    rejected_dates[str(year)] = {}
+                    rejected_dates[str(year)][str(month)] = []
+                    rejected_dates[str(year)][str(month)].append(date)
 
     if type == 'rejected':
         dates = {date:request.POST[date] for date in rejected_dates[str(year)][str(month)] if date in request.POST}
         for date in dates:
             if dates[date] == '1':
-                print (rejected_dates)
                 rejected_dates[str(year)][str(month)].remove(date)
-                approved_dates[str(year)][str(month)].append(date)
+
+                if year in approved_dates:
+                    if month in approved_dates[year]:
+                        approved_dates[str(year)][str(month)].append(date)
+                    else:
+                        approved_dates[year][str(month)] = []
+                        approved_dates[str(year)][str(month)].append(date)
+                else:
+                    approved_dates[year] = {}
+                    approved_dates[year][str(month)] = []
+                    approved_dates[str(year)][str(month)].append(date)
 
     mess.approved_dates = json.dumps(approved_dates)
     mess.rejected_dates = json.dumps(rejected_dates)

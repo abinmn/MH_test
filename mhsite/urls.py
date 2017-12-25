@@ -19,6 +19,6 @@ urlpatterns =[
     url(r'^secretary/processing/$', views.processing, name='mess_cut_processing'),
     url(r'^secretary/processing/(?P<mess_id>[0-9]+)/$', views.approval, name='mess_cut_approval'),
     url(r'^secretary/processing/(?P<mess_id>[0-9]+)/submit$', views.final, name='mess_cut_final'),
-    url(r'^secretary/processing/(?P<type>(approved|rejected))/(?P<mess_id>[0-9]+)/$', views.edit, name='mess_cut_edit'),
-    url(r'^secretary/processing/(?P<type>(approved|rejected))/(?P<mess_id>[0-9]+)/submit$', views.submit_edit, name='mess_cut_edit_submit'),
+    url(r'^secretary/processing/(?P<type>(approved|rejected))/(?P<mess_id>[0-9]+)/(?P<year>[0-9]+)/(?P<month>([A-Z][a-z]+))/$', views.edit, name='mess_cut_edit'),
+    url(r'^secretary/processing/(?P<type>(approved|rejected))/(?P<mess_id>[0-9]+)/(?P<year>[0-9]+)/(?P<month>([A-Z][a-z]+))/submit$', views.submit_edit, name='mess_cut_edit_submit'),
 ]
