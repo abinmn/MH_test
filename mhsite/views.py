@@ -172,6 +172,38 @@ def url_lock(page):
         return index
     return index
 
+def mess_cut(request,year = str(datetime.now().year), month = str(datetime.now().month)):
+    email = request.user.email
+    mess = MessCut.objects.get(email=email)
+
+    if request.method == 'POST':
+        year = request.POST['year']
+        month = str(datetime.strptime(request.POST['month'], '%B').month)
+
+    approved_dates = json.loads(mess.approved_dates)
+    rejected_dates = json.loads(mess.rejected_dates)
+
+    if year in approved_dates:
+        if month in approved_dates[year]:
+            approved_dates = approved_dates[year][month]
+
+    if year in rejected_dates:
+        if month in rejected_dates[year]:
+            rejected_dates = rejected_dates[year][month]
+
+    processing_dates = json.loads(mess.mess_cut_dates)['processing']
+
+    years = [year for year in json.loads(mess.approved_dates)]
+    dupe = [year for year in json.loads(mess.rejected_dates) if year not in years]
+    if len(dupe)>0:
+        for year in dupe:
+            years.append(year)
+
+    cal = {'months':list(calendar.month_name), 'years':years, 'default':[year, datetime.strftime(datetime(2017,int(month),1),'%B')]}
+    args = {'calendar':cal, 'processing':processing_dates, 'approved':approved_dates, 'rejected':rejected_dates}
+
+    return render(request, 'mhsite/mess_user.html', args)
+
 #mess cut data generation function (supprot function for mess_cut)
 def date_gen(lst,start_date,end_date,objects=None):
     delta = end_date - start_date
@@ -209,7 +241,7 @@ def duplicate(date_list,date_type):
             continue
     return duplicate_dates
 
-def mess_cut(request):
+def mess_cut_apply(request):
     if request.method=='POST':
         form=MessCutForm(request.POST)
 
@@ -292,8 +324,8 @@ def processing(request, year=str(datetime.now().year), month=str(datetime.now().
 
 
 
-    if len(data['processing']) > 0:
-        res.append([name,room_number,applied_date,mid])
+        if len(data['processing']) > 0:
+            res.append([name,room_number,applied_date,mid])
 
     years = [year for year in approved_dates]
     dupe = [year for year in rejected_dates if year not in years]
