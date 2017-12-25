@@ -10,7 +10,7 @@ from django.utils.dateformat import format
 
 # Application form
 class ApplicationForm(forms.ModelForm):
-    date_of_birth = forms.DateField(input_formats=('%d/%m/%Y',), )
+    date_of_birth = forms.DateField(widget=forms.TextInput(attrs={"class": "datepicker"}))
 
     class Meta:
         model = Application
@@ -22,8 +22,6 @@ class RegistrationForm(UserCreationForm):
     admission_number = forms.CharField(max_length=7, validators=[
         RegexValidator(regex=r'^[0-9]{4}/[0-9]{2}$', message='The format for admission number is 1234/17')],
                                        help_text='1234/17')
-    email = forms.EmailField(required=True)
-    first_name = forms.CharField(max_length=100, required=False)
 
     class Meta:
         model = User
@@ -36,11 +34,8 @@ class RegistrationForm(UserCreationForm):
             'password1',
             'password2',
         )
-
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=False)
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
         user.username = self.cleaned_data['email']
         user.email = self.cleaned_data['email']
         user.password1 = self.cleaned_data['password1']

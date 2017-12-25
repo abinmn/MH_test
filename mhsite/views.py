@@ -4,7 +4,7 @@ from mhsite.forms import RegistrationForm,ApplicationForm,ExpenseForm,ReportForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from mhsite import middleware
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from mhsite.models import Application,Expense,MessCut, Profile
 from django.views import View
 from django.views.generic.edit import FormView
@@ -71,11 +71,28 @@ def loginf(request):
                 login(request, user)
                 return redirect('/')
         else:
-            args = {'form': form, 'error': True}
-            return render(request, 'mhsite/login.html', args)
+            args = {'name': url_lock('home'), 'error': 'Login Failed', 'erlink':'/login'}
+            return render(request, 'mhsite/regerror.html', args)
 
 
     return render(request, 'mhsite/login.html', args)
+
+
+def pwdreset(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/login')
+        else:
+            print(form.errors)
+            args = {'error':'Password reset failed', 'erlink':'/pwdreset'}
+            return render(request, 'mhsite/regerror.html', args)
+
+    else:
+        form = PasswordChangeForm(user=request.user)
+        args = {'form': form, 'name': url_lock('log')}
+        return render(request, 'mhsite/passwordreset.html', args)
 
 
 def logoutf(request):
@@ -84,8 +101,13 @@ def logoutf(request):
     return render(request, 'mhsite/logout.html')
 
 
-def students():
-    pass
+def students(request):
+    try:
+        details = Application.objects.get(e_mail=request.user.username)
+    except:
+        details =''
+    args = {'data':details}
+    return render(request, 'mhsite/studentscorner.html', args)
 
 
 def application(request):
@@ -103,13 +125,13 @@ def application(request):
             return render(request, 'mhsite/application.html', args)
     else:
         students = studentlist()
-        user = request.user.username
+        usern = request.user.username
         users = ''
         for x in students:
-            if x[3] == user:
+            if x[3] == usern:
                 users = x
         if users is not None:
-            args = {'form': form, 'name': url_lock('application'), 'user': users}
+            args = {'form': form, 'name': url_lock('application'), 'usern': users}
             return render(request, 'mhsite/application.html', args)
 
 
@@ -118,25 +140,26 @@ def application(request):
 
 def registration(request):
     if request.method == 'POST':
-
         form = RegistrationForm(request.POST)
         if form.is_valid():
             if Profile.objects.filter(admission_number=form.cleaned_data.get('admission_number')).exists():
                 if User.objects.filter(username=form.cleaned_data.get('email')).exists():
-                    args = {'error':'User already exist'}
+                    args = {'name': url_lock('home'), 'error':'User already exist', 'erlink':'/register'}
                     return render(request, 'mhsite/regerror.html', args)
                 else:
                     form.save()
                     return redirect('/')
 
             else:
-                args = {'error': 'You are not selected'}
+                args = {'name': url_lock('home'), 'error': 'You are not selected', 'erlink':'/register'}
                 return render(request, 'mhsite/regerror.html', args)
-
+        else:
+            args = {'forms': form}
+            return render(request, 'mhsite/registration.html', args)
 
     else:
         form = RegistrationForm()
-        args = {'forms': form, 'name': url_lock('reg')}
+        args = {'forms':form}
         return render(request, 'mhsite/registration.html', args)
 
 
@@ -368,12 +391,14 @@ def submit_edit(request, type, mess_id, year = datetime.now().year, month = date
 
     if type == 'approved':
         dates = {date:request.POST[date] for date in approved_dates[str(year)][str(month)] if date in request.POST}
+        print (dates)
         for date in dates:
             if dates[date] == '0':
                 approved_dates[str(year)][str(month)].remove(date)
 
+
                 if year in rejected_dates:
-                    if month in rejected_dates[year]:
+                    if str(month) in rejected_dates[year]:
                         rejected_dates[str(year)][str(month)].append(date)
                     else:
                         rejected_dates[str(year)][str(month)] = []
@@ -390,7 +415,7 @@ def submit_edit(request, type, mess_id, year = datetime.now().year, month = date
                 rejected_dates[str(year)][str(month)].remove(date)
 
                 if year in approved_dates:
-                    if month in approved_dates[year]:
+                    if str(month) in approved_dates[year]:
                         approved_dates[str(year)][str(month)].append(date)
                     else:
                         approved_dates[year][str(month)] = []

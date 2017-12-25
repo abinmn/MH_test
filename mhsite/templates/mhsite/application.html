@@ -7,15 +7,12 @@
             <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Application Form</h3>
 
             <form method="post" class='col s12'>
-            <input type='hidden' name='csrfmiddlewaretoken' value='9dxwfRDnPegLhWkkBwZZettR5wp3mPkiAlfI3fhKlJ6BSbmBhf8BD9r03unt9gBr' />
+            {% csrf_token %}
 
 
-          
-
-            
               <div class='row'>
                   <div class='input-field col s8 offset-s2'>
-                      <input type="text" value='{{user.0}}' name="admission_number" id="id_admission_number" required maxlength="7" />
+                      <input type="text" value='{{usern.0}}' name="admission_number" id="id_admission_number" required maxlength="7" />
                       <label for="id_admission_number">Admission number:</label>
                   </div>
               </div>
@@ -26,7 +23,7 @@
             
               <div class='row'>
                   <div class='input-field col s8 offset-s2'>
-                      <input type="text" value='{{user.1}}' name="first_name" id="id_first_name" required maxlength="100" />
+                      <input type="text" value='{{usern.1}}' name="first_name" id="id_first_name" required maxlength="100" />
                       <label for="id_first_name">First name:</label>
                   </div>
               </div>
@@ -37,7 +34,7 @@
             
               <div class='row'>
                   <div class='input-field col s8 offset-s2'>
-                      <input type="text" value='{{user.2}}' name="last_name" id="id_last_name" required maxlength="100" />
+                      <input type="text" value='{{usern.2}}' name="last_name" id="id_last_name" required maxlength="100" />
                       <label for="id_last_name">Last name:</label>
                   </div>
               </div>
@@ -48,8 +45,19 @@
             
               <div class='row'>
                   <div class='input-field col s8 offset-s2'>
-                      <input type="text" value='{{user.3}}' name="e_mail" id="id_e_mail" required maxlength="100" />
+                      <input type="text" value='{{usern.3}}' name="e_mail" id="id_e_mail" required maxlength="100" />
                       <label for="id_e_mail">E mail:</label>
+                  </div>
+              </div>
+
+
+
+
+
+              <div class='row'>
+                  <div class='input-field col s8 offset-s2'>
+                      <input type="text" name="room_no" id="id_room_no" required maxlength="500" />
+                      <label for="id_room_no">Room No:</label>
                   </div>
               </div>
             
@@ -92,7 +100,7 @@
             
               <div class='row'>
                   <div class='input-field col s8 offset-s2'>
-                      <input type="text" name="date_of_birth" id="id_date_of_birth" required />
+                      <input type="text" class="datepicker" name="date_of_birth" id="id_date_of_birth" required />
                       <label for="id_date_of_birth">Date of birth:</label>
                   </div>
               </div>

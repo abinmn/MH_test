@@ -8,19 +8,20 @@
 
             <form method="post" class='col s12'>
                 {% csrf_token %}
-                {% for field in forms %}
                 <div class='row'>
                     <div class='input-field col s8 offset-s2'>
-                        {{field}}
-                        {{ field.label_tag }}
-
-                        <div class="error">
-                        {% if admission_error and field.name == 'admission_number'%}
-                          Your admission number doesn't exist on occupance database
-                        {% endif %}
-
-                        {{ field.errors|striptags }}
-                        </div>
+                        <font color="red">
+                        {{forms.errors}}
+                        {{forms.non_field_errors}}
+                        </font>
+                    </div>
+                </div>
+                {% for i in forms %}
+                <div class='row'>
+                    <div class='input-field col s8 offset-s2'>
+                        {{i}}
+                        {{ i.label_tag }}
+                        {{ i.errors|striptags }}
                     </div>
                 </div>
                 {% endfor %}
