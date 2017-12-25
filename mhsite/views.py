@@ -102,8 +102,10 @@ def logoutf(request):
 
 
 def students(request):
+    print (request.user.username)
     try:
-        details = Application.objects.get(e_mail=request.user.username)
+        details = Application.objects.get(email=request.user.username)
+
     except:
         details =''
     args = {'data':details}
@@ -130,6 +132,7 @@ def application(request):
         for x in students:
             if x[3] == usern:
                 users = x
+        print ('users',users)
         if users is not None:
             args = {'form': form, 'name': url_lock('application'), 'usern': users}
             return render(request, 'mhsite/application.html', args)
