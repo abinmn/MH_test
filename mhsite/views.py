@@ -232,24 +232,40 @@ def mess_cut(request):
         args={'form':form}
         return render(request,'mhsite/mess_cut.html',args)
 
-def processing(request):
-    rows = MessCut.objects.all()
+def processing(request, year=str(datetime.now().year), month=str(datetime.now().month) ):
+    rows = MessCut.objects.all().order_by('applied_date')
     res = []
+    approved = []
+    rejected = []
     for row in rows:
-        a =  Profile.objects.all()[0].email
         profile = Profile.objects.get(email=row.email)
         name = profile.fname + " " + profile.lname
         mid = MessCut.objects.get(email=row.email).id
         room_number = profile.room_number #Complete after finishing profile
+        approved_dates = json.loads(MessCut.objects.get(pk=mid).approved_dates)
+        rejected_dates = json.loads(MessCut.objects.get(pk=mid).rejected_dates)
+
 
         data = json.loads(row.mess_cut_dates)
         timestamp = float(MessCut.objects.get(email=row.email).applied_date)
         applied_date = datetime.fromtimestamp(timestamp).strftime("%A, %d-%m-%Y")
 
-        if len(data['processing']) > 0:
-            res.append([name,room_number,applied_date,mid])
 
-    args = {'data':res}
+        if year in approved_dates:
+            if month in approved_dates[year]:
+                approved.append([name, room_number,len(approved_dates[year][month]), mid])
+
+
+        if year in rejected_dates:
+            if month in approved_dates[year]:
+                rejected.append([name, room_number,len(rejected_dates[year][month]), mid])
+
+
+
+    if len(data['processing']) > 0:
+        res.append([name,room_number,applied_date,mid])
+
+    args = {'data':res,'approved':approved, 'rejected':rejected}
     return render(request,'mhsite/mess_cut_processing.html', args)
 
 def approval(request,mess_id):
@@ -260,7 +276,7 @@ def approval(request,mess_id):
     profile_data = Profile.objects.get(email=mess.email)
     profile = {'name':profile_data.fname + profile_data.lname, 'room_number':profile_data.room_number, 'mobile':profile_data.phone}
 
-    args = {'dates':dates, 'profile':profile}
+    args = {'dates':dates, 'profile':profile,}
     return render(request,'mhsite/verify.html', args)
 
 #Final processing of mess data
@@ -268,9 +284,9 @@ def final(request, mess_id):
     mess = MessCut.objects.get(id=mess_id)
     mess_data = json.loads(mess.mess_cut_dates)
     dates = mess_data['processing']
+
     approved_dates = []
     rejected_dates = []
-
     for date in dates:
         try:
 
@@ -313,6 +329,45 @@ def final(request, mess_id):
     #print ('approved', approved_dates, 'rejected', rejected_dates)
     return redirect('/')
 
+def edit(request,type, mess_id, year = datetime.now().year, month = datetime.now().month ) :
+    approved_dates = json.loads(MessCut.objects.get(id= mess_id).approved_dates)
+    rejected_dates = json.loads(MessCut.objects.get(id= mess_id).rejected_dates)
+
+    if type == 'approved':
+        dates = approved_dates[str(year)][str(month)]
+    elif type == 'rejected':
+        dates = rejected_dates[str(year)][str(month)]
+
+    args = {'dates':dates, 'type':type, 'mess_id':mess_id}
+    return render(request, 'mhsite/edit.html', args)
+
+def submit_edit(request, type, mess_id, year = datetime.now().year, month = datetime.now().month ):
+    mess = MessCut.objects.get(id= mess_id)
+    approved_dates = json.loads(mess.approved_dates)
+    rejected_dates = json.loads(mess.rejected_dates)
+
+    if type == 'approved':
+        dates = {date:request.POST[date] for date in approved_dates[str(year)][str(month)] if date in request.POST}
+        for date in dates:
+            if dates[date] == '0':
+                approved_dates[str(year)][str(month)].remove(date)
+                rejected_dates[str(year)][str(month)].append(date)
+
+
+    if type == 'rejected':
+        dates = {date:request.POST[date] for date in rejected_dates[str(year)][str(month)] if date in request.POST}
+        for date in dates:
+            if dates[date] == '1':
+                print (rejected_dates)
+                rejected_dates[str(year)][str(month)].remove(date)
+                approved_dates[str(year)][str(month)].append(date)
+
+    mess.approved_dates = json.dumps(approved_dates)
+    mess.rejected_dates = json.dumps(rejected_dates)
+    mess.process_date = datetime.now().timestamp()
+    mess.save()
+
+    return redirect('/secretary/processing')
 
 def expense(request,year,month,day):
     date=(year+'-'+month+'-'+day)

@@ -31,7 +31,7 @@ class Profile(models.Model):
     #e_mail = models.CharField(max_length=100, default='E-mail')
     email = models.EmailField()
     room_number = models.IntegerField(default=0)
-    phone=models.CharField(max_length=10,validators=[RegexValidator(regex=r'[0-9]{10}',message='Invalid mobile number')])
+    phone = models.CharField(max_length=10,validators=[RegexValidator(regex=r'[0-9]{10}',message='Invalid mobile number')])
 
     def __str__(self):
         return self.fname+' '+self.lname
