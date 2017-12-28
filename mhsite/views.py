@@ -12,7 +12,7 @@ from django.db import IntegrityError
 from django.utils.dateformat import format
 from datetime import date, timedelta, datetime
 import json, os, calendar
-
+from django.http import HttpResponse
 
 def home(request):
     args = {'name': url_lock('home')}
@@ -85,7 +85,7 @@ def pwdreset(request):
             form.save()
             return redirect('/login')
         else:
-            print(form.errors)
+
             args = {'error':'Password reset failed', 'erlink':'/pwdreset'}
             return render(request, 'mhsite/regerror.html', args)
 
@@ -102,7 +102,7 @@ def logoutf(request):
 
 
 def students(request):
-    print (request.user.username)
+
     try:
         details = Application.objects.get(email=request.user.username)
 
@@ -122,7 +122,7 @@ def application(request):
             form.save()
             return redirect('/')
         else:
-            print(form.errors)
+
             args = {'form': form, 'name': url_lock('application')}
             return render(request, 'mhsite/application.html', args)
     else:
@@ -132,7 +132,7 @@ def application(request):
         for x in students:
             if x[3] == usern:
                 users = x
-        print ('users',users)
+
         if users is not None:
             args = {'form': form, 'name': url_lock('application'), 'usern': users}
             return render(request, 'mhsite/application.html', args)
@@ -180,7 +180,7 @@ def mess_cut(request,year = str(datetime.now().year), month = str(datetime.now()
     mess = MessCut.objects.get(email=email)
 
     if request.method == 'POST':
-        year = request.POST['year']
+        year = str(request.POST['year'])
         month = str(datetime.strptime(request.POST['month'], '%B').month)
 
     approved_dates = json.loads(mess.approved_dates)
@@ -201,6 +201,9 @@ def mess_cut(request,year = str(datetime.now().year), month = str(datetime.now()
     if len(dupe)>0:
         for year in dupe:
             years.append(year)
+
+    if len(years) == 0:
+        years = [year]
 
     cal = {'months':list(calendar.month_name), 'years':years, 'default':[year, datetime.strftime(datetime(2017,int(month),1),'%B')]}
     args = {'calendar':cal, 'processing':processing_dates, 'approved':approved_dates, 'rejected':rejected_dates}
@@ -292,7 +295,6 @@ def mess_cut_apply(request):
 
 def processing(request, year=str(datetime.now().year), month=str(datetime.now().month) ):
 
-
     if request.method == 'POST':
         year = request.POST['year']
         month = str(datetime.strptime(request.POST['month'], '%B').month)
@@ -329,6 +331,44 @@ def processing(request, year=str(datetime.now().year), month=str(datetime.now().
 
         if len(data['processing']) > 0:
             res.append([name,room_number,applied_date,mid])
+
+
+    if request.POST.get('download'):
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+        from io import StringIO, BytesIO
+        buff = BytesIO()
+
+        from reportlab.lib.styles import getSampleStyleSheet
+        from reportlab.lib import colors
+        from reportlab.pdfgen import canvas
+        from reportlab.lib.pagesizes import A4
+        from reportlab.lib.units import inch
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Image, Spacer, PageBreak, Table, TableStyle
+
+        styles = getSampleStyleSheet()
+        styleNormal = styles['Normal']
+        styleHeading = styles['Heading2']
+        styleHeading.alignment = 0
+
+        story = []
+        story.append(Paragraph('Report for '+request.POST['month'] + ", " +year, styleHeading))
+
+        for i in approved:
+            i.pop()
+        approved.insert(0, ['Name', 'Room Number', 'Days'])
+        tableData = approved
+        ts = [
+    ('LINEABOVE', (0,0), (-1,0), 1, colors.gray),
+    ('LINEBELOW', (0,0), (-1,0), 1, colors.gray)]
+        story.append(Table(tableData, hAlign = 'LEFT', style=ts))
+
+        doc = SimpleDocTemplate(buff, title = "Mess Cut Report %s, %s"%(request.POST['month'], year), author = "mess committee")
+        doc.build(story)
+        response.write(buff.getvalue())
+        buff.close()
+        return response
+
 
     years = [year for year in approved_dates]
     dupe = [year for year in rejected_dates if year not in years]
@@ -398,7 +438,7 @@ def final(request, mess_id):
 
     mess.save()
 
-    #print ('approved', approved_dates, 'rejected', rejected_dates)
+
     return redirect('/')
 
 def edit(request,type, mess_id, year = datetime.now().year, month = datetime.now().month ) :
@@ -426,7 +466,7 @@ def submit_edit(request, type, mess_id, year = datetime.now().year, month = date
 
     if type == 'approved':
         dates = {date:request.POST[date] for date in approved_dates[str(year)][str(month)] if date in request.POST}
-        print (dates)
+
         for date in dates:
             if dates[date] == '0':
                 approved_dates[str(year)][str(month)].remove(date)
