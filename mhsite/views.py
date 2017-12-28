@@ -37,7 +37,7 @@ def gallery(request):
 
 def mess(request):
     if request.user.is_authenticated:
-        return mess_cut_apply(request)
+        return redirect('/mess_cut')
     else:
         return render(request, 'mhsite/messlogout.html')
 

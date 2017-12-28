@@ -20,7 +20,7 @@
                       <li><p style="color:white"> {{ date }}
                             <input type="radio" id="{{date}}" id="test1" name="{{date}}" value="1" {%if type == 'approved' %}checked {%endif%} />
                               <label for="{{date}}">Approve</label>
-                            <input type="radio" id="{{date}}n" id="test2"  name="{{date}}"  value="0" {%if type == 'rejected' %}checked {%endif%} />
+                            <input type="radio" id="{{date}}n" id="test2" name="{{date}}"  value="0" {%if type == 'rejected' %}checked {%endif%} />
                               <label for="{{date}}n">Reject</label>
                       </li></p>
                     {% endfor %}

@@ -1,20 +1,35 @@
-<h4>Name: {{profile.name}} <br/>
-    Room Number: {{profile.room_number}} <br/>
-    Mobile: {{profile.phone}}
-</h4>
+{% extends 'base.html' %}
 
-<form method="POST" action="submit" >
-  {% csrf_token %}
-  <ul>
-    {% for date in dates%}
-      <li> {{ date }}
-            <input type="radio" name="{{date}}" value="1" {%if type == 'approved' %}checked {%endif%} />
-              <label>Approve</label>
-            <input type="radio" name="{{date}}"  value="0" {%if type == 'rejected' %}checked {%endif%} />
-              <label>Reject</label>
-      </li>
-    {% endfor %}
-  </ul>
 
-<input type="submit" value="Submit">
-</form>
+
+{% block body %}
+    <div class='container'>
+        <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
+            <div class='row'>
+                <h4 style="color:white">Name: {{profile.name}} <br/>
+                    Room Number: {{profile.room_number}} <br/>
+                    Mobile: {{profile.phone}}
+                </h4>
+            </div>
+            <div class="row">
+
+                <form method="POST" action="submit" >
+                  {% csrf_token %}
+                  <ul>
+                    {% for date in dates%}
+                      <li> <p style="color:white"> {{ date }}
+                            <input type="radio" id="{{date}}" id="test1"  name="{{date}}" value="1" {%if type == 'approved' %}checked {%endif%} />
+                              <label for="{{date}}">Approve</label>
+                            <input type="radio" id="{{date}}n" id="test2" name="{{date}}"  value="0" {%if type == 'rejected' %}checked {%endif%} />
+                          <label for="{{date}}n">Reject</label></p>
+                      </li>
+                    {% endfor %}
+                  </ul>
+
+                <input type="submit"  class="col offset-s2 s8 waves-effect waves-light btn green" value="Submit" />
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
