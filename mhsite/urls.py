@@ -19,7 +19,13 @@ urlpatterns =[
     url(r'^reset-password/complete/$', password_reset_complete,{'template_name':'mhsite/forgetview2.html'}, name='password_reset_complete'),
     url(r'^studentscorner/$', views.students, name='students'),
     url(r'^expense_tracker/(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})/$', views.expense, name='expense'),
-    url(r'report/$', views.Report.as_view(), name='report'),
-    url(r'report/(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})/$',views.ReportDetails.as_view(), name='report_details'),
-
+    url(r'^report/$', views.Report.as_view(), name='report'),
+    url(r'^report/(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})/$',views.ReportDetails.as_view(), name='report_details'),
+    url(r'^mess_cut/$',views.mess_cut,name='mess_cut'),
+    url(r'^mess_cut/apply/$',views.mess_cut_apply,name='mess_cut_apply'),
+    url(r'^secretary/processing/$', views.processing, name='mess_cut_processing'),
+    url(r'^secretary/processing/(?P<mess_id>[0-9]+)/$', views.approval, name='mess_cut_approval'),
+    url(r'^secretary/processing/(?P<mess_id>[0-9]+)/submit$', views.final, name='mess_cut_final'),
+    url(r'^secretary/processing/(?P<type>(approved|rejected))/(?P<mess_id>[0-9]+)/(?P<year>[0-9]+)/(?P<month>([A-Z][a-z]+))/$', views.edit, name='mess_cut_edit'),
+    url(r'^secretary/processing/(?P<type>(approved|rejected))/(?P<mess_id>[0-9]+)/(?P<year>[0-9]+)/(?P<month>([A-Z][a-z]+))/submit$', views.submit_edit, name='mess_cut_edit_submit'),
 ]

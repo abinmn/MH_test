@@ -1,0 +1,160 @@
+
+
+{% extends 'base.html' %}
+
+{% block body %}
+
+<!--- To be corrected -->
+                     <form action = "" method="POST">
+                       {%csrf_token%}
+                       <div class="row">
+                        <div id = "date">
+                          <select name = "month">
+                           {% for month in calendar.months%}
+                           {{month}}
+                             <option value={{month}} {% if month == calendar.default.1%}selected="selected"{% endif %}> {{month}} </option>
+                           {% endfor %}
+                           </select>
+
+                           <select name = "year">
+                             {% for year in calendar.years%}
+                               <option value="{{year}}">{{year}}</option>
+                             {% endfor %}
+                           </select>
+                         </div>
+                       </div>
+                         <div class = "row">
+                           <input type = "submit">
+                         </div>
+                     </form>
+<!-- Till Here -->
+
+
+    <div class = "container">
+    <div class = "row">
+       <div  class="col s12" style="margin-top:25px; " >
+          <ul class = "tabs">
+             <li class = "tab col s3" ><a class = "active" href = "#processing">Processing</a></li>
+             <li class = "tab col s3"><a href = "#approved">
+                Approved</a></li>
+             <li class = "tab col s3"><a href = "#rejected">Rejected</a></li>
+          </ul>
+
+
+
+
+       <div id = "processing" class = "col s12">
+         <div class='container'>
+             <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
+                 <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Approve Mess Cut</h3>
+                 <div class='row'>
+                     <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+                         <thead>
+                           <tr>
+                               <th>Name:</th>
+                               <th>Room number:</th>
+                               <th>Applied Date:</th>
+                           </tr>
+                         </thead>
+
+                         <tbody>
+                         {% for student in data %}
+
+                           <tr >
+
+                               {% for value in student|slice:'3' %}
+                               <td><a href= {{student.3}}>{{value}}</td>
+                               {% endfor %}
+                           </tr>
+                         </a>
+                         {% endfor %}
+                         </tbody>
+
+                     </table>
+                 </div>
+
+             </div>
+         </div>
+       </div>
+
+       <div id = "approved" class = "col s12">
+         <div class='container'>
+             <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
+
+                <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Applied Mess Cuts</h3>
+
+                 <div class='row'>
+
+                     <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+                         <thead>
+                           <tr>
+                               <th>Name:</th>
+                               <th>Room number:</th>
+                               <th>Number of Approved Dates:</th>
+                           </tr>
+                         </thead>
+
+                         <tbody>
+
+
+                           {%for i in approved%}
+                           <tr >
+                             {% for j in i|slice:'3'%}
+                              <td style="{% if forloop.counter > 1 %}text-align: right; {% endif %}"><a href="approved/{{i.3}}/{{calendar.default.0}}/{{calendar.default.1}}">{{j}}</a></td>
+
+                             {% endfor %}
+
+                           </tr>
+                           {% endfor %}
+                         </a>
+
+                         </tbody>
+                     </table>
+                 </div>
+               </div>
+
+
+         </div>
+       </div>
+
+       <div id = "rejected" class = "col s12">
+         <div class='container'>
+             <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
+                 <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Rejected Mess Cuts</h3>
+                 <div class='row'>
+                     <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+                         <thead>
+                           <tr>
+                               <th>Name:</th>
+                               <th>Room number:</th>
+                               <th>Number of Rejected Days:</th>
+                           </tr>
+                         </thead>
+
+                         <tbody>
+
+
+                           {%for i in rejected%}
+                           <tr >
+                             {% for j in i|slice:'3'%}
+                              <td style="{% if forloop.counter > 1 %}text-align: right; {% endif %}"><a href="rejected/{{i.3}}/{{calendar.default.0}}/{{calendar.default.1}}">{{j}}</td></a>
+
+                             {% endfor %}
+
+                           </tr>
+                           {% endfor %}
+                         </a>
+
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         </div>
+       </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

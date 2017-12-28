@@ -1,7 +1,7 @@
 from django.utils import timezone
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Application, Expense
+from .models import Application,Expense,MessCut
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 import datetime
@@ -65,4 +65,36 @@ class ExpenseForm(forms.ModelForm):
 
 
 class ReportForm(forms.Form):
-    date = forms.DateField(widget=forms.TextInput(attrs={"class": "datepicker"}))
+    date=forms.DateField(widget=forms.TextInput(attrs={"class":"datepicker"}))
+
+
+class MessCutForm(forms.Form):
+
+    start_date=forms.DateField(widget=forms.TextInput(attrs={"class":"datepicker"}))
+    end_date=forms.DateField(widget=forms.TextInput(attrs={"class":"datepicker"}))
+
+    def save(self,commit=True):
+        data=super(MessCutForm,self).save(commit=False)
+        data.mess_cut_dates=self.cleaned_data['mess_cut_dates']
+        data.email=self.cleaned_data['email']
+
+        if commit:
+            data.save()
+"""class MessCutForm(forms.ModelForm):
+    start_date=forms.DateField(widget=forms.TextInput(attrs={"class":"datepicker"}))
+    end_date=forms.DateField(widget=forms.TextInput(attrs={"class":"datepicker"}))
+
+
+    class Meta:
+        model=MessCut
+        fields='__all__'
+        widgets = {'email': forms.HiddenInput()}
+
+    def save(self,commit=True):
+        data=super(MessCutForm,self).save(commit=False)
+        data.start_date=self.cleaned_data['start_date']
+        data.start_date=self.cleaned_data['end_date']
+        data.email=self.cleaned_data['email']
+
+        if commit:
+            data.save()"""

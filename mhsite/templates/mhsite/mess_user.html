@@ -1,0 +1,119 @@
+
+{% extends 'base.html' %}
+
+{% block body %}
+
+      <form action = "" method="POST">
+        {%csrf_token%}
+        <div class="row">
+         <div id = "date">
+           <select name = "month">
+            {% for month in calendar.months%}
+            {{month}}
+              <option value={{month}} {% if month == calendar.default.1%}selected="selected"{% endif %}> {{month}} </option>
+            {% endfor %}
+            </select>
+
+            <select name = "year">
+              {% for year in calendar.years%}
+                <option value="{{year}}">{{year}}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+          <div class = "row">
+            <input type = "submit">
+          </div>
+      </form>
+
+
+      <div class = "container">
+      <div class = "row">
+         <div  class="col s12" style="margin-top:25px; " >
+            <ul class = "tabs">
+               <li class = "tab col s3" ><a class = "active" href = "#processing">Processing</a></li>
+               <li class = "tab col s3"><a href = "#approved">
+                  Approved</a></li>
+               <li class = "tab col s3"><a href = "#rejected">Rejected</a></li>
+            </ul>
+
+
+
+
+         <div id = "processing" class = "col s12">
+           <div class='container'>
+               <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
+                   <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Approve Mess Cut</h3>
+                   <div class='row'>
+                       <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+
+                         <tbody>
+                         {% for date in processing%}
+                           <tr>
+                              <td>{{date}}</td>
+                           </tr>
+                          {% endfor %}
+
+                        </tbody>
+                       </table>
+                   </div>
+
+               </div>
+           </div>
+         </div>
+
+         <div id = "approved" class = "col s12">
+           <div class='container'>
+               <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
+
+                  <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Applied Mess Cuts</h3>
+
+                   <div class='row'>
+
+                       <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+
+
+                           <tbody>
+                             {% for date in approved%}
+                             <tr>
+                               <td> {{date}} </td>
+                            </tr>
+                            {% endfor %}
+
+                           </tbody>
+                       </table>
+                   </div>
+                 </div>
+
+
+           </div>
+         </div>
+
+         <div id = "rejected" class = "col s12">
+           <div class='container'>
+               <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
+                   <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Rejected Mess Cuts</h3>
+                   <div class='row'>
+                       <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+
+
+                           <tbody>
+                             {% for date in rejected%}
+                              <tr>
+                               <td> {{date}} </td>
+                              </tr>
+                              {% endfor %}
+
+                           </tbody>
+                       </table>
+                   </div>
+               </div>
+           </div>
+         </div>
+
+      </div>
+      </div>
+
+
+
+      {% endblock %}
