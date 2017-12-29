@@ -7,7 +7,7 @@
           <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
 
               <div class='row'>
-                  <a href='/mess_cut' class="col offset-s2 s8 waves-effect waves-light btn blue darken-2">Apply Messcut</a>
+                  <a href='/mess_cut/apply' class="col offset-s2 s8 waves-effect waves-light btn blue darken-2">Apply Messcut</a>
               </div>
               <div class = "row">
                   <form action = "" method="POST">
@@ -16,7 +16,7 @@
 
                      <div id = "date">
                        <select class="browser-default" name = "month">
-                        {% for month in calendar.months%}
+                        {% for month in calendar.months %}
                           <option value={{month}} {% if month == calendar.default.1%}selected="selected"{% endif %}> {{month}} </option>
                         {% endfor %}
                         </select>
@@ -67,7 +67,15 @@
                        <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
 
                          <tbody>
+
+                           {%if processing|length == 0%}
+                            <div class = 'error' style="text-align:center;">
+                              No applied dates
+                            </div>
+                           {% endif %}
+
                          {% for date in processing%}
+
                            <tr>
                               <td>{{date}}</td>
                            </tr>
@@ -85,7 +93,7 @@
            <div class='container'>
                <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
 
-                  <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Applied Mess Cuts</h3>
+                  <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Approved Mess Cuts</h3>
 
                    <div class='row'>
 
@@ -93,12 +101,19 @@
 
 
                            <tbody>
+                             {% if approved|length == 0 or dtype.0%}
+                              <div class = 'error' style='text-align:center;'>
+
+                                No data found
+                              </div>
+
+                            {% else %}
                              {% for date in approved%}
                              <tr>
                                <td> {{date}} </td>
                             </tr>
                             {% endfor %}
-
+                            {% endif %}
                            </tbody>
                        </table>
                    </div>
@@ -117,11 +132,19 @@
 
 
                            <tbody>
+                             {% if rejected|length == 0 or dtype.1%}
+                              <div class = 'error' style='text-align:center;'>
+
+                                No data found
+                              </div>
+
+                            {% else %}
                              {% for date in rejected%}
-                              <tr>
+                             <tr>
                                <td> {{date}} </td>
-                              </tr>
-                              {% endfor %}
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
 
                            </tbody>
                        </table>
