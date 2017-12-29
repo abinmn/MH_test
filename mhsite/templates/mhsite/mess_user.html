@@ -3,41 +3,58 @@
 
 {% block body %}
 
-      <form action = "" method="POST">
-        {%csrf_token%}
-        <div class="row">
+      <div class = "container">
+          <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
 
+              <div class='row'>
+                  <a href='/mess_cut' class="col offset-s2 s8 waves-effect waves-light btn blue darken-2">Apply Messcut</a>
+              </div>
+              <div class = "row">
+                  <form action = "" method="POST">
+                    {%csrf_token%}
+                      <table><tr><td>
 
-           <select name = "month">
-            {% for month in calendar.months%}
-            {{month}}
-              <option value={{month}} {% if month == calendar.default.1%}selected="selected"{% endif %}> {{month}} </option>
-            {% endfor %}
-            </select>
+                     <div id = "date">
+                       <select class="browser-default" name = "month">
+                        {% for month in calendar.months%}
+                          <option value={{month}} {% if month == calendar.default.1%}selected="selected"{% endif %}> {{month}} </option>
+                        {% endfor %}
+                        </select>
 
-            <select name = "year">
-
-              {% for year in calendar.years%}
-                <option value="{{year}}" {% if year == calendar.default.0%}selected="selected"{% endif %}>{{year}}</option>
-              {% endfor %}
-            </select>
-
-        </div>
-          <div class = "row">
-            <input type = "submit">
+                     </div>
+                        </td></td>
+                              <div id = "date">
+                        <select class="browser-default" name = "year">
+                          {% for year in calendar.years%}
+                            <option value="{{year}}">{{year}}</option>
+                          {% endfor %}
+                        </select>
+                              </div>
+                          </td></tr>
+                      </table>
+                      <div class = "row">
+                    <input type="submit" value="Submit" class="col offset-s2 s8 waves-effect waves-light btn green" />
+                      </div>
+                  </form>
+              </div>
           </div>
-      </form>
+      </div>
 
 
       <div class = "container">
-      <div class = "row">
-         <div  class="col s12" style="margin-top:25px; " >
-            <ul class = "tabs">
-               <li class = "tab col s3" ><a class = "active" href = "#processing">Processing</a></li>
-               <li class = "tab col s3"><a href = "#approved">
-                  Approved</a></li>
-               <li class = "tab col s3"><a href = "#rejected">Rejected</a></li>
-            </ul>
+          <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
+              <div class = "row">
+                 <div  class="col s12" style="margin-top:25px; " >
+                    <ul class = "tabs">
+                       <li class = "tab col s3" ><a class = "active" href = "#processing">Processing</a></li>
+                       <li class = "tab col s3"><a href = "#approved">
+                          Approved</a></li>
+                       <li class = "tab col s3"><a href = "#rejected">Rejected</a></li>
+                    </ul>
+                 </div>
+              </div>
+          </div>
+      </div>
 
 
 
@@ -45,7 +62,7 @@
          <div id = "processing" class = "col s12">
            <div class='container'>
                <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
-                   <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Dates Applied</h3>
+                   <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Applied Mess Cut</h3>
                    <div class='row'>
                        <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
 

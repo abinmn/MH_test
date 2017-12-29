@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
-from django.shortcuts import render,redirect
-from mhsite.forms import RegistrationForm,ApplicationForm,ExpenseForm,ReportForm,MessCutForm
+from django.shortcuts import render, redirect
+from mhsite.forms import RegistrationForm, ApplicationForm, ExpenseForm, ReportForm, MessCutForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from mhsite import middleware
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from mhsite.models import Application,Expense,MessCut, Profile
+from mhsite.models import Application, Expense, MessCut, Profile
 from django.views import View
 from django.views.generic.edit import FormView
 from django.db import IntegrityError
@@ -13,21 +12,6 @@ from django.utils.dateformat import format
 from datetime import date, timedelta, datetime
 import json, os, calendar
 from django.http import HttpResponse
-
-def home(request):
-    args = {'name': url_lock('home')}
-    return render(request, 'mhsite/index.html', args)
-
-
-def gallery(request):
-    args = {'name': url_lock('gallery')}
-    return render(request, 'mhsite/gallery.html', args)
-
-
-def mess(request):
-    args = {'name': url_lock('mess')}
-    return render(request, 'mhsite/messlogout.html', args)
-
 
 def studentlist():
     pwd = os.path.dirname(__file__)
@@ -43,25 +27,68 @@ def studentlist():
     return students
 
 
-def allocation(request):
-    if request.method == 'POST':
-        students = studentlist()
-        Profile.objects.filter().delete()
-        for x in students:
-            p = Profile(admission_number=x[0], fname=x[1], lname=x[2], email=x[3])
-            p.save()
+def home(request):
+    return render(request, 'mhsite/index.html')
 
-        return redirect('/')
+
+def gallery(request):
+    return render(request, 'mhsite/gallery.html')
+
+
+def mess(request):
+    if request.user.is_authenticated:
+        return redirect('/mess_cut')
+    else:
+        return render(request, 'mhsite/messlogout.html')
+
+
+def allocation(request):
+    if request.user.is_authenticated and (request.user.username == 'admin' or request.user.username == 'secretary'):
+        if request.method == 'POST':
+            students = studentlist()
+            Profile.objects.filter().delete()
+            for x in students:
+                p = Profile(admission_number=x[0], fname=x[1], lname=x[2], email=x[3])
+                p.save()
+
+            return redirect('/')
+
+        else:
+            students = studentlist()
+            args = {'data': students}
+            return render(request, 'mhsite/admin/allocation.html', args)
+    else:
+        pass
+
+
+def registration(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            if Profile.objects.filter(admission_number=form.cleaned_data.get('admission_number')).exists():
+                if User.objects.filter(username=form.cleaned_data.get('email')).exists():
+                    args = {'error': 'User already exist', 'erlink': '/register'}
+                    return render(request, 'mhsite/regerror.html', args)
+                else:
+                    form.save()
+                    return redirect('/accounts/login')
+
+            else:
+                args = {'error': 'You are not selected', 'erlink': '/register'}
+                return render(request, 'mhsite/regerror.html', args)
+        else:
+            args = {'forms': form}
+            return render(request, 'mhsite/accounts/registration.html', args)
 
     else:
-        students = studentlist()
-        args = {'name': url_lock('alloc'), 'data': students}
-        return render(request, 'mhsite/allocation.html', args)
+        form = RegistrationForm()
+        args = {'forms': form}
+        return render(request, 'mhsite/accounts/registration.html', args)
 
 
 def loginf(request):
     form = AuthenticationForm
-    args = {'form': form, 'name': url_lock('log')}
+    args = {'form': form}
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -71,7 +98,7 @@ def loginf(request):
                 login(request, user)
                 return redirect('/')
         else:
-            args = {'name': url_lock('home'), 'error': 'Login Failed', 'erlink':'/login'}
+            args = {'error': 'Login Failed', 'erlink': '/accounts/login'}
             return render(request, 'mhsite/regerror.html', args)
 
 
@@ -96,9 +123,8 @@ def pwdreset(request):
 
 
 def logoutf(request):
-    args = {'name': url_lock('log')}
     logout(request)
-    return render(request, 'mhsite/logout.html')
+    return render(request, 'mhsite/accounts/logout.html')
 
 
 def students(request):
@@ -106,77 +132,61 @@ def students(request):
     try:
         details = Application.objects.get(email=request.user.username)
 
-    except:
-        details =''
-    args = {'data':details}
-    return render(request, 'mhsite/studentscorner.html', args)
+        else:
+            form = PasswordChangeForm(user=request.user)
+            args = {'form': form}
+            return render(request, 'mhsite/accounts/passwordreset.html', args)
+    else:
+        return redirect('/')
 
 
 def application(request):
-
-    form = ApplicationForm()
-    args = {'form': form, 'name': url_lock('application')}
-    if request.method == 'POST':
-        form = ApplicationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-        else:
-
-            args = {'form': form, 'name': url_lock('application')}
-            return render(request, 'mhsite/application.html', args)
-    else:
-        students = studentlist()
-        usern = request.user.username
-        users = ''
-        for x in students:
-            if x[3] == usern:
-                users = x
-
-
-        if users is not None:
-            args = {'form': form, 'name': url_lock('application'), 'usern': users, 'test':a}
-            return render(request, 'mhsite/application.html', args)
-
-
-# error for registration pending
-
-
-def registration(request):
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            if Profile.objects.filter(admission_number=form.cleaned_data.get('admission_number')).exists():
-                if User.objects.filter(username=form.cleaned_data.get('email')).exists():
-                    args = {'name': url_lock('home'), 'error':'User already exist', 'erlink':'/register'}
-                    return render(request, 'mhsite/regerror.html', args)
-                else:
-                    form.save()
-                    return redirect('/')
-
+    if request.user.is_authenticated:
+        form = ApplicationForm()
+        args = {'form': form}
+        if request.method == 'POST':
+            form = ApplicationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('/students/studentscorner')
             else:
-                args = {'name': url_lock('home'), 'error': 'You are not selected', 'erlink':'/register'}
-                return render(request, 'mhsite/regerror.html', args)
+                print(form.errors)
+                args = {'form': form}
+                return render(request, 'mhsite/students/application.html', args)
         else:
-            args = {'forms': form}
-            return render(request, 'mhsite/registration.html', args)
-
+            students = studentlist()
+            usern = request.user.username
+            users = ''
+            for x in students:
+                if x[3] == usern:
+                    users = x
+            print('users', users)
+            if users is not None:
+                args = {'form': form, 'usern': users}
+                return render(request, 'mhsite/students/application.html', args)
     else:
-        form = RegistrationForm()
-        args = {'forms':form}
-        return render(request, 'mhsite/registration.html', args)
+        return redirect('/')
 
 
-def url_lock(page):
-    index = ['' for x in range(9)]
-    pages = ['home', 'gallery', 'student', 'mess', 'contact', 'log', 'alloc', 'application', 'reg']
-    if page in pages:
-        i = pages.index(page)
-        index[i] = 'active'
-        return index
-    return index
+def contacts(request):
+    return render(request, 'mhsite/contacts.html')
 
-def mess_cut(request,year = str(datetime.now().year), month = str(datetime.now().month)):
+
+def students(request):
+    if request.user.is_authenticated:
+        print(request.user.username)
+        if Application.objects.filter(email=request.user.username).exists:
+            details = Application.objects.get(email=request.user.username)
+            args = {'data': details}
+            return render(request, 'mhsite/students/studentscorner.html', args)
+
+        else:
+            return redirect('/students/application')
+    else:
+        return redirect('/')
+
+
+def mess_cut(request, year=str(datetime.now().year), month=str(datetime.now().month)):
     email = request.user.email
     try:
         mess = MessCut.objects.get(email=email)
@@ -203,34 +213,35 @@ def mess_cut(request,year = str(datetime.now().year), month = str(datetime.now()
             for year in dupe:
                 years.append(year)
 
-        if len(years) == 0:
-            years = [year]
+    years = [year for year in json.loads(mess.approved_dates)]
+    dupe = [year for year in json.loads(mess.rejected_dates) if year not in years]
+    if len(dupe) > 0:
+        for year in dupe:
+            years.append(year)
 
-        cal = {'months':list(calendar.month_name), 'years':years, 'default':[year, datetime.strftime(datetime(2017,int(month),1),'%B')]}
-        args = {'calendar':cal, 'processing':processing_dates, 'approved':approved_dates, 'rejected':rejected_dates}
-
-        return render(request, 'mhsite/mess_user.html', args)
+    cal = {'months': list(calendar.month_name), 'years': years,
+           'default': [year, datetime.strftime(datetime(2017, int(month), 1), '%B')]}
+    args = {'calendar': cal, 'processing': processing_dates, 'approved': approved_dates, 'rejected': rejected_dates}
+    return render(request, 'mhsite/mess_user.html', args)
 
     except:
         cal = {'months':list(calendar.month_name), 'years':[year], 'default':[year, datetime.strftime(datetime(2017,int(month),1),'%B')]}
         args = {'calendar':cal}
         return render(request, 'mhsite/mess_user.html', {})
 
-#mess cut data generation function (supprot function for mess_cut)
-def date_gen(lst,start_date,end_date,objects=None):
+
+def date_gen(lst, start_date, end_date, objects=None):
     delta = end_date - start_date
-    for i in range(delta.days+1):
+    for i in range(delta.days + 1):
         lst['processing'].append(str(start_date + timedelta(days=i)))
-
-
     seen = set()
     seen_add = seen.add
     lst['processing'] = [x for x in lst['processing'] if not (x in seen or seen_add(x))]
 
     return lst
 
-#support function for mess_cut
-def duplicate(date_list,date_type):
+
+def duplicate(date_list, date_type):
     duplicate_dates = []
     for date in date_list['processing']:
         date_obj = datetime.strptime(date, '%Y-%m-%d')
@@ -238,7 +249,7 @@ def duplicate(date_list,date_type):
         month = str(date_obj.month)
         if year in date_type:
 
-            if  month in date_type[year]:
+            if month in date_type[year]:
 
                 if date in date_type[str(date_obj.year)][str(date_obj.month)]:
                     duplicate_dates.append(date)
@@ -253,58 +264,57 @@ def duplicate(date_list,date_type):
             continue
     return duplicate_dates
 
+
 def mess_cut_apply(request):
-    if request.method=='POST':
-        form=MessCutForm(request.POST)
+    if request.method == 'POST':
+        form = MessCutForm(request.POST)
 
         if form.is_valid():
-            email= request.user.email
-            start_date=form.cleaned_data['start_date']
-            end_date=form.cleaned_data['end_date']
+            email = request.user.email
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
             try:
 
                 obj = MessCut.objects.get(email=email)
                 date_list = json.loads(obj.mess_cut_dates)
 
-                date_list=(date_gen(date_list,start_date,end_date))
+                date_list = (date_gen(date_list, start_date, end_date))
 
                 approved_dates = json.loads(obj.approved_dates)
                 rejected_dates = json.loads(obj.rejected_dates)
 
-                duplicate_dates = duplicate(date_list,approved_dates) + duplicate(date_list,rejected_dates)
+                duplicate_dates = duplicate(date_list, approved_dates) + duplicate(date_list, rejected_dates)
                 date_list['processing'] = [date for date in date_list['processing'] if date not in duplicate_dates]
 
                 date_list = (json.dumps(date_list))
 
-                obj.mess_cut_dates=date_list
-                obj.applied_date =  datetime.now().timestamp()
+                obj.mess_cut_dates = date_list
+                obj.applied_date = datetime.now().timestamp()
 
                 obj.save()
 
-                #return to new page
+                # return to new page
             except:
 
-                date_list = (date_gen({'processing':[]},start_date,end_date))
+                date_list = (date_gen({'processing': []}, start_date, end_date))
                 date_list = json.dumps(date_list)
-                obj = MessCut(email=email, mess_cut_dates=date_list, applied_date =  datetime.now().timestamp())
+                obj = MessCut(email=email, mess_cut_dates=date_list, applied_date=datetime.now().timestamp())
                 obj.save()
-
 
             return redirect('/')
         else:
-            args={'form':form}
-            return render(request,'mhsite/mess_cut.html',args)
+            args = {'form': form}
+            return render(request, 'mhsite/mess_cut.html', args)
     else:
         form = MessCutForm()
-        args={'form':form}
-        return render(request,'mhsite/mess_cut.html',args)
+        args = {'form': form}
+        return render(request, 'mhsite/mess_cut.html', args)
 
-def processing(request, year=str(datetime.now().year), month=str(datetime.now().month) ):
 
+def processing(request, year=str(datetime.now().year), month=str(datetime.now().month)):
     if request.method == 'POST':
         year = request.POST['year']
         month = str(datetime.strptime(request.POST['month'], '%B').month)
-
 
     rows = MessCut.objects.all().order_by('applied_date')
     res = []
@@ -314,29 +324,24 @@ def processing(request, year=str(datetime.now().year), month=str(datetime.now().
         profile = Application.objects.get(email=row.email)
         name = profile.first_name + " " + profile.last_name
         mid = MessCut.objects.get(email=row.email).id
-        room_number = profile.room_number #Complete after finishing profile
+        room_number = profile.room_number  # Complete after finishing profile
         approved_dates = json.loads(MessCut.objects.get(pk=mid).approved_dates)
         rejected_dates = json.loads(MessCut.objects.get(pk=mid).rejected_dates)
-
 
         data = json.loads(row.mess_cut_dates)
         timestamp = float(MessCut.objects.get(email=row.email).applied_date)
         applied_date = datetime.fromtimestamp(timestamp).strftime("%A, %d-%m-%Y")
 
-
         if year in approved_dates:
             if month in approved_dates[year]:
-                approved.append([name, room_number,len(approved_dates[year][month]), mid])
-
+                approved.append([name, room_number, len(approved_dates[year][month]), mid])
 
         if year in rejected_dates:
             if month in rejected_dates[year]:
-                rejected.append([name, room_number,len(rejected_dates[year][month]), mid])
-
-
+                rejected.append([name, room_number, len(rejected_dates[year][month]), mid])
 
         if len(data['processing']) > 0:
-            res.append([name,room_number,applied_date,mid])
+            res.append([name, room_number, applied_date, mid])
 
 
     if request.POST.get('download'):
@@ -378,26 +383,30 @@ def processing(request, year=str(datetime.now().year), month=str(datetime.now().
 
     years = [year for year in approved_dates]
     dupe = [year for year in rejected_dates if year not in years]
-    if len(dupe)>0:
+    if len(dupe) > 0:
         for year in dupe:
             years.append(year)
 
-    cal = {'months':list(calendar.month_name), 'years':years, 'default':[year, datetime.strftime(datetime(2017,int(month),1),'%B')]}
-    args = {'data':res,'approved':approved, 'rejected':rejected, 'calendar':cal }
-    return render(request,'mhsite/mess_cut_processing.html', args)
+    cal = {'months': list(calendar.month_name), 'years': years,
+           'default': [year, datetime.strftime(datetime(2017, int(month), 1), '%B')]}
+    args = {'data': res, 'approved': approved, 'rejected': rejected, 'calendar': cal}
+    return render(request, 'mhsite/mess_cut_processing.html', args)
 
-def approval(request,mess_id):
+
+def approval(request, mess_id):
     mess = MessCut.objects.get(id=mess_id)
     mess_data = json.loads(mess.mess_cut_dates)
     dates = mess_data['processing']
 
     profile_data = Application.objects.get(email=mess.email)
-    profile = {'name':profile_data.first_name + profile_data.last_name, 'room_number':profile_data.room_number, 'mobile':profile_data.phone}
+    profile = {'name': profile_data.first_name + profile_data.last_name, 'room_number': profile_data.room_number,
+               'mobile': profile_data.phone}
 
-    args = {'dates':dates, 'profile':profile,}
-    return render(request,'mhsite/verify.html', args)
+    args = {'dates': dates, 'profile': profile, }
+    return render(request, 'mhsite/verify.html', args)
 
-#Final processing of mess data
+
+# Final processing of mess data
 def final(request, mess_id):
     mess = MessCut.objects.get(id=mess_id)
     mess_data = json.loads(mess.mess_cut_dates)
@@ -418,7 +427,7 @@ def final(request, mess_id):
 
     mess_data['processing'] = [date for date in dates if (date not in approved_dates) and (date not in rejected_dates)]
 
-    def date_data(x_date,dates):
+    def date_data(x_date, dates):
         for date in dates:
             dateobject = datetime.strptime(date, '%Y-%m-%d')
 
@@ -432,10 +441,8 @@ def final(request, mess_id):
 
         return x_date
 
-
-    dic_approved_dates = (date_data(json.loads(mess.approved_dates),approved_dates))
-    dic_rejected_dates = (date_data(json.loads(mess.rejected_dates),rejected_dates))
-
+    dic_approved_dates = (date_data(json.loads(mess.approved_dates), approved_dates))
+    dic_rejected_dates = (date_data(json.loads(mess.rejected_dates), rejected_dates))
 
     mess.mess_cut_dates = json.dumps(mess_data)
     mess.approved_dates = json.dumps(dic_approved_dates)
@@ -444,29 +451,29 @@ def final(request, mess_id):
 
     mess.save()
 
-
     return redirect('/')
 
-def edit(request,type, mess_id, year = datetime.now().year, month = datetime.now().month ) :
 
+def edit(request, type, mess_id, year=datetime.now().year, month=datetime.now().month):
     if month.isalpha():
-        month = datetime.strptime(month,"%B").month
+        month = datetime.strptime(month, "%B").month
 
-    approved_dates = json.loads(MessCut.objects.get(id= mess_id).approved_dates)
-    rejected_dates = json.loads(MessCut.objects.get(id= mess_id).rejected_dates)
+    approved_dates = json.loads(MessCut.objects.get(id=mess_id).approved_dates)
+    rejected_dates = json.loads(MessCut.objects.get(id=mess_id).rejected_dates)
 
     if type == 'approved':
         dates = approved_dates[str(year)][str(month)]
     elif type == 'rejected':
         dates = rejected_dates[str(year)][str(month)]
 
-    args = {'dates':dates, 'type':type, 'mess_id':mess_id}
+    args = {'dates': dates, 'type': type, 'mess_id': mess_id}
     return render(request, 'mhsite/edit.html', args)
 
-def submit_edit(request, type, mess_id, year = datetime.now().year, month = datetime.now().month ):
-    mess = MessCut.objects.get(id= mess_id)
+
+def submit_edit(request, type, mess_id, year=datetime.now().year, month=datetime.now().month):
+    mess = MessCut.objects.get(id=mess_id)
     if month.isalpha():
-        month = datetime.strptime(month,"%B").month
+        month = datetime.strptime(month, "%B").month
     approved_dates = json.loads(mess.approved_dates)
     rejected_dates = json.loads(mess.rejected_dates)
 
@@ -476,7 +483,6 @@ def submit_edit(request, type, mess_id, year = datetime.now().year, month = date
         for date in dates:
             if dates[date] == '0':
                 approved_dates[str(year)][str(month)].remove(date)
-
 
                 if year in rejected_dates:
                     if str(month) in rejected_dates[year]:
@@ -490,7 +496,7 @@ def submit_edit(request, type, mess_id, year = datetime.now().year, month = date
                     rejected_dates[str(year)][str(month)].append(date)
 
     if type == 'rejected':
-        dates = {date:request.POST[date] for date in rejected_dates[str(year)][str(month)] if date in request.POST}
+        dates = {date: request.POST[date] for date in rejected_dates[str(year)][str(month)] if date in request.POST}
         for date in dates:
             if dates[date] == '1':
                 rejected_dates[str(year)][str(month)].remove(date)
@@ -513,9 +519,10 @@ def submit_edit(request, type, mess_id, year = datetime.now().year, month = date
 
     return redirect('/secretary/processing')
 
-def expense(request,year,month,day):
-    date=(year+'-'+month+'-'+day)
-    if request.method=='POST':
+
+def expense(request, year, month, day):
+    date = (year + '-' + month + '-' + day)
+    if request.method == 'POST':
         try:
             expense = Expense.objects.get(date=date)
             form = ExpenseForm(request.POST, instance=expense)
@@ -527,7 +534,7 @@ def expense(request,year,month,day):
 
             try:
                 form.save()
-                return redirect('/report'+'/'+date)
+                return redirect('/report' + '/' + date)
 
             except IntegrityError as e:
 
@@ -536,15 +543,15 @@ def expense(request,year,month,day):
             args = {'form': form}
             return render(request, 'mhsite/expense_tracker.html', args)
 
-#edit/create expense
+    # edit/create expense
     else:
-        #edit expense for a month
+        # edit expense for a month
         try:
             expense = Expense.objects.get(date=date)
             form = ExpenseForm(instance=expense)
             args = {'form': form}
             return render(request, 'mhsite/expense_tracker.html', args)
-        #create expense for a month
+        # create expense for a month
         except Expense.DoesNotExist:
             form = ExpenseForm(initial={'date': date})
             args = {'form': form}

@@ -21,17 +21,23 @@
             <div class="nav-wrapper" style='padding-left: 20px;'>
               <a href="/" class="brand-logo">MEC-MH</a>
               <ul class="right hide-on-med-and-down web">
-                <li class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"><a href="/">Home</a></li>
-                <li class="{% if request.resolver_match.url_name == 'gallery' %}active{% endif %}"><a href="/gallery">Gallery</a></li>
-                <li class="{% if request.resolver_match.url_name == 'student' %}active{% endif %}"><a href="/studentscorner">Student's corner</a></li>
-                <li class="{% if request.resolver_match.url_name == 'mess' %}active{% endif %}"><a href="/mess">Mess</a></li>
-                <li class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}"><a href="#">Contacts</a></li>
-                <li class="{% if request.resolver_match.url_name == 'log' %}active{% endif %}">
+                <li><a href="/">Home</a></li>
+                <li><a href="/gallery">Gallery</a></li>
+                  {% with 'admin mess secretary' as list %}
+                  {% if user.username in list.split %}
+                <li><a href="/admins/manage">Manage</a></li>
+                  {% else %}
+                <li><a href="/students/studentscorner">Student's corner</a></li>
+                <li><a href="/mess">Mess</a></li>
+                  {% endif %}
+                  {% endwith %}
+                <li><a href="/contacts">Contacts</a></li>
+                <li>
                     <a class='btn waves-effect waves-light green' href="
                     {% if user.is_authenticated %}
-                    /logout
+                    /accounts/logout
                     {% else %}
-                    /login
+                    /accounts/login
                     {% endif %}
                     ">
                     {% if user.is_authenticated %}
@@ -39,8 +45,8 @@
                     {% else %}
                     Login/Sign up
                     {% endif %}
-
-                </a></li>
+                    </a>
+                </li>
               </ul>
               <ul class="left mobile">
                 <li><a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a></li>
@@ -53,15 +59,21 @@
         <ul id="slide-out" class="side-nav mobile">
             <li class='active'><a href="/" style='color:rgba(255,255,255,0.87);'>Home</a></li>
             <li><a href="/gallery" style='color:rgba(255,255,255,0.87);'>Gallery</a></li>
-            <li><a href="/studentscorner" style='color:rgba(255,255,255,0.87);'>Student's corner</a></li>
+            {% with 'admin mess secretary' as list %}
+            {% if user.username in list.split %}
+            <li><a href="/admins/manage">Manage</a></li>
+            {% else %}
+            <li><a href="/students/studentscorner" style='color:rgba(255,255,255,0.87);'>Student's corner</a></li>
             <li><a href="/mess" style='color:rgba(255,255,255,0.87);'>Mess</a></li>
-            <li><a href="#" style='color:rgba(255,255,255,0.87);'>Contacts</a></li>
-            <li class="{% if request.resolver_match.url_name == 'log' %}active{% endif %}">
+            {% endif %}
+            {% endwith %}
+            <li><a href="/contacts" style='color:rgba(255,255,255,0.87);'>Contacts</a></li>
+            <li>
                     <a class='btn waves-effect waves-light green' href="
                     {% if user.is_authenticated %}
-                    /logout
+                    /accounts/logout
                     {% else %}
-                    /login
+                    /accounts/login
                     {% endif %}
                     ">
                     {% if user.is_authenticated %}
@@ -90,18 +102,6 @@
     <script type="text/javascript" src="{% static 'mhsite/js/jquery-3.2.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'mhsite/js/materialize.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'mhsite/js/index.js' %}"></script>
-    <script type="text/javascript" src="{% static 'mhsite/js/responsiveslides.js' %}"></script>
-    <script>
-    $(function () {
-      $("#slider").responsiveSlides({
-        auto: true,
-        pager: false,
-        nav: true,
-        speed: 2000,
-        maxwidth: 1000,
-        namespace: "centered-btns"
-      });
-    });
     </script>
   </body>
 </html>
