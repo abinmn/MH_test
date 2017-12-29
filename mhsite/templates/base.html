@@ -8,7 +8,7 @@
     <script type = "text/javascript"
    src = "https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js">
-</script> 
+</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <title>MH-site</title>
@@ -24,7 +24,10 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/gallery">Gallery</a></li>
                   {% with 'admin mess secretary' as list %}
-                  {% if user.username in list.split %}
+                  {% if user.username in list.split and user.username == 'mess'%}
+                <li><a href="/mess/secretary/processing">Manage</a></li>
+                <li><a href="/expense">Expense</a></li>
+                  {% elif user.username in list.split and user.username != mess %}
                 <li><a href="/admins/manage">Manage</a></li>
                   {% else %}
                 <li><a href="/students/studentscorner">Student's corner</a></li>
