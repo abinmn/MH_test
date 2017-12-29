@@ -133,8 +133,9 @@ def application(request):
             if x[3] == usern:
                 users = x
 
+
         if users is not None:
-            args = {'form': form, 'name': url_lock('application'), 'usern': users}
+            args = {'form': form, 'name': url_lock('application'), 'usern': users, 'test':a}
             return render(request, 'mhsite/application.html', args)
 
 
@@ -177,38 +178,43 @@ def url_lock(page):
 
 def mess_cut(request,year = str(datetime.now().year), month = str(datetime.now().month)):
     email = request.user.email
-    mess = MessCut.objects.get(email=email)
+    try:
+        mess = MessCut.objects.get(email=email)
+        if request.method == 'POST':
+            year = str(request.POST['year'])
+            month = str(datetime.strptime(request.POST['month'], '%B').month)
 
-    if request.method == 'POST':
-        year = str(request.POST['year'])
-        month = str(datetime.strptime(request.POST['month'], '%B').month)
+        approved_dates = json.loads(mess.approved_dates)
+        rejected_dates = json.loads(mess.rejected_dates)
 
-    approved_dates = json.loads(mess.approved_dates)
-    rejected_dates = json.loads(mess.rejected_dates)
+        if year in approved_dates:
+            if month in approved_dates[year]:
+                approved_dates = approved_dates[year][month]
 
-    if year in approved_dates:
-        if month in approved_dates[year]:
-            approved_dates = approved_dates[year][month]
+        if year in rejected_dates:
+            if month in rejected_dates[year]:
+                rejected_dates = rejected_dates[year][month]
 
-    if year in rejected_dates:
-        if month in rejected_dates[year]:
-            rejected_dates = rejected_dates[year][month]
+        processing_dates = json.loads(mess.mess_cut_dates)['processing']
 
-    processing_dates = json.loads(mess.mess_cut_dates)['processing']
+        years = [year for year in json.loads(mess.approved_dates)]
+        dupe = [year for year in json.loads(mess.rejected_dates) if year not in years]
+        if len(dupe)>0:
+            for year in dupe:
+                years.append(year)
 
-    years = [year for year in json.loads(mess.approved_dates)]
-    dupe = [year for year in json.loads(mess.rejected_dates) if year not in years]
-    if len(dupe)>0:
-        for year in dupe:
-            years.append(year)
+        if len(years) == 0:
+            years = [year]
 
-    if len(years) == 0:
-        years = [year]
+        cal = {'months':list(calendar.month_name), 'years':years, 'default':[year, datetime.strftime(datetime(2017,int(month),1),'%B')]}
+        args = {'calendar':cal, 'processing':processing_dates, 'approved':approved_dates, 'rejected':rejected_dates}
 
-    cal = {'months':list(calendar.month_name), 'years':years, 'default':[year, datetime.strftime(datetime(2017,int(month),1),'%B')]}
-    args = {'calendar':cal, 'processing':processing_dates, 'approved':approved_dates, 'rejected':rejected_dates}
+        return render(request, 'mhsite/mess_user.html', args)
 
-    return render(request, 'mhsite/mess_user.html', args)
+    except:
+        cal = {'months':list(calendar.month_name), 'years':[year], 'default':[year, datetime.strftime(datetime(2017,int(month),1),'%B')]}
+        args = {'calendar':cal}
+        return render(request, 'mhsite/mess_user.html', {})
 
 #mess cut data generation function (supprot function for mess_cut)
 def date_gen(lst,start_date,end_date,objects=None):
