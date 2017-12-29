@@ -4,58 +4,55 @@
 
 {% block body %}
 
-<!--- To be corrected -->
       <div class = "container">
           <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
-              <div class = "row">
+              <div class = "row"  style='display:flex; justify-content:center;'>
                   <form action = "" method="POST">
                     {%csrf_token%}
-                      <table><tr><td>
-
-                     <div id = "date">
-                       <select class="browser-default" name = "month">
-                        {% for month in calendar.months%}
-                          <option value={{month}} {% if month == calendar.default.1%}selected="selected"{% endif %}> {{month}} </option>
-                        {% endfor %}
-                        </select>
-
-                     </div>
-                        </td></td>
-                              <div id = "date">
-                        <select class="browser-default" name = "year">
-                          {% for year in calendar.years%}
-                            <option value="{{year}}">{{year}}</option>
-                          {% endfor %}
-                        </select>
-                              </div>
-                          </td></tr>
+                      <table>
+                      <tr>
+                      <td>
+                        <div id = "date">
+                            <select style='width:40vw;' class="browser-default" name = "year">
+                              {% for year in calendar.years%}
+                                <option value="{{year}}">{{year}}</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                        <br/>
+                        <div id = "date">
+                          <select style='width:40vw;' class="browser-default" name = "month">
+                            {% for month in calendar.months%}
+                              <option value={{month}} {% if month == calendar.default.1%}selected="selected"{% endif %}> {{month}} </option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </td>
+                      </tr>
                       </table>
-                      <div class = "row">
-                    <input type="submit" value="Submit" class="col offset-s2 s8 waves-effect waves-light btn green" />
+                      <div class = "row" style='display:flex; justify-content:center;'>
+                        <input style='width:25vw;' type="submit" value="Submit" class="col offset-s1 s8 waves-effect waves-light btn green" />
                       </div>
                       <input type = "hidden" value ="download">
-                         <input type = "submit" name = 'download' value="Download" class="col offset-s2 s8 waves-effect waves-light btn green" >
+                      <div class = "row" style='display:flex; justify-content:center;'>
+                        <input style='width:25vw;' type = "submit" name = 'download' value="Download" class="col offset-s1 s8 waves-effect waves-light btn green" >
+                      </div>
                   </form>
               </div>
           </div>
       </div>
-<!-- Till Here -->
-
 
     <div class = "container">
         <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
             <div class = "row">
                <div  class="col s12" style="margin-top:25px; " >
-                  <ul class = "tabs">
-                     <li class = "tab col s3" ><a class = "active" href = "#processing">Processing</a></li>
-                     <li class = "tab col s3"><a href = "#approved">
-                        Approved</a></li>
-                     <li class = "tab col s3"><a href = "#rejected">Rejected</a></li>
+                  <ul class = "tabs tabs-fixed-width">
+                     <li style='background-color:rgba(0,0,0,0.87);' class = "tab col s3" ><a class = "active" href = "#processing">Processing</a></li>
+                     <li style='background-color:rgba(0,0,0,0.87);' class = "tab col s3"><a href = "#approved">Approved</a></li>
+                     <li style='background-color:rgba(0,0,0,0.87);' class = "tab col s3"><a href = "#rejected">Rejected</a></li>
                   </ul>
                </div>
             </div>
-        </div>
-    </div>
 
 
 
@@ -71,9 +68,9 @@
                    </div>
 
                    {% else %}
-                     <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+                     <table class="bordered">
                          <thead>
-                           <tr>
+                           <tr style='text-align:left; color:rgba(255,255,255,0.87)'>
                                <th>Name:</th>
                                <th>Room number:</th>
                                <th>Applied Date:</th>
@@ -114,9 +111,9 @@
                      </div>
 
                    {% else %}
-                     <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+                     <table class="bordered">
                          <thead>
-                           <tr>
+                           <tr style='text-align:left; color:rgba(255,255,255,0.87)'>
                                <th>Name:</th>
                                <th>Room number:</th>
                                <th>Number of Approved Dates:</th>
@@ -158,9 +155,9 @@
                      </div>
 
                    {% else %}
-                     <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+                     <table class="bordered">
                          <thead>
-                           <tr>
+                           <tr style='text-align:left; color:rgba(255,255,255,0.87)'>
                                <th>Name:</th>
                                <th>Room number:</th>
                                <th>Number of Rejected Days:</th>
@@ -189,6 +186,8 @@
          </div>
        </div>
 
+      </div>
+    </div>
     </div>
 </div>
 

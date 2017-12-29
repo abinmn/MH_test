@@ -46,6 +46,9 @@ $(document).ready(function(){
         }
     });
 
+    //Initialize swipeable tabs
+    //$('.tabs').tabs({swipeable: true});
+
     //Carousel slideshow
     //setInterval(function(){
     //    $('.carousel').carousel('next');
