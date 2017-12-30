@@ -12,21 +12,23 @@
                       <table>
                       <tr>
                       <td>
-                        <div id = "date">
-                            <select style='width:40vw;' class="browser-default" name = "year">
+
+                        <div style='float:left; padding-right:2vw' id = "date">
+                            <select style='width:25vw;' class="browser-default" name = "year">
                               {% for year in calendar.years%}
                                 <option value="{{year}}">{{year}}</option>
                               {% endfor %}
                             </select>
                         </div>
-                        <br/>
-                        <div id = "date">
-                          <select style='width:40vw;' class="browser-default" name = "month">
+          
+                        <div style='float:right' id = "date">
+                          <select style='width:25vw;' class="browser-default" name = "month">
                             {% for month in calendar.months%}
                               <option value={{month}} {% if month == calendar.default.1%}selected="selected"{% endif %}> {{month}} </option>
                             {% endfor %}
                           </select>
                         </div>
+
                       </td>
                       </tr>
                       </table>
@@ -53,9 +55,6 @@
                   </ul>
                </div>
             </div>
-
-
-
 
        <div id = "processing" class = "col s12">
          <div class='container'>
@@ -139,8 +138,6 @@
                      </table>
                  </div>
                </div>
-
-
          </div>
        </div>
 
@@ -163,9 +160,7 @@
                                <th>Number of Rejected Days:</th>
                            </tr>
                          </thead>
-
                          <tbody>
-
 
                            {%for i in rejected%}
                            <tr >
