@@ -50,6 +50,7 @@ $(document).ready(function(){
     //$('.tabs').tabs({swipeable: true});
 
     //Carousel slideshow
+    $('.carousel').carousel({fullWidth:true});
     //setInterval(function(){
     //    $('.carousel').carousel('next');
     //},3000);
