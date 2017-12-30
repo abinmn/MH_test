@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from mhsite.forms import RegistrationForm, ApplicationForm, ExpenseForm, ReportForm, MessCutForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -134,7 +134,11 @@ def application(request):
         form = ApplicationForm()
         args = {'form': form}
         if request.method == 'POST':
-            form = ApplicationForm(request.POST)
+            if Application.objects.filter(email=request.user.username).exists():
+                instance = Application.objects.get(email=request.user.email)
+                form = ApplicationForm(request.POST, instance = instance)
+            else:
+                form = ApplicationForm(request.POST)
             if form.is_valid():
                 form.save()
                 return redirect('/students/studentscorner')
@@ -152,17 +156,14 @@ def application(request):
 
             try:
                 app = Application.objects.get(email=request.user.email)
-                print (app.room_number)
                 personal = {'room_number':app.room_number, 'address':app.address, 'pincode':app.pincode, 'phone':app.phone, 'dob':app.date_of_birth, 'category':app.category, 'religion':app.religion, 'caste':app.caste }
             except:
-                pass
-                #personal ={'room_number':'', 'address':'' 'pincode':'', 'phone':'', 'dob':'', 'category':'', 'religion':'', 'caste':''}
+                personal = ''
             if users is not None:
                 args = {'form': form, 'usern': users, 'data':personal}
                 return render(request, 'mhsite/students/application.html', args)
     else:
         return redirect('/')
-
 
 def contacts(request):
     return render(request, 'mhsite/contacts.html')
@@ -170,8 +171,8 @@ def contacts(request):
 
 def students(request):
     if request.user.is_authenticated:
-        print(request.user.username)
-        if Application.objects.filter(email=request.user.username).exists:
+
+        if Application.objects.filter(email=request.user.username).exists():
             details = Application.objects.get(email=request.user.username)
             args = {'data': details}
             return render(request, 'mhsite/students/studentscorner.html', args)
@@ -179,7 +180,7 @@ def students(request):
         else:
             return redirect('/students/application')
     else:
-        return redirect('/')
+        return application(request)
 
 
 def mess_cut(request, year=str(datetime.now().year), month=str(datetime.now().month)):
@@ -309,7 +310,7 @@ def mess_cut_apply(request):
                 obj = MessCut(email=email, mess_cut_dates=date_list, applied_date=datetime.now().timestamp())
                 obj.save()
 
-            return redirect('/')
+            return redirect('/mess_cut')
         else:
             args = {'form': form}
             return render(request, 'mhsite/mess_cut.html', args)
@@ -416,8 +417,9 @@ def approval(request, mess_id):
         dates = mess_data['processing']
 
         profile_data = Application.objects.get(email=mess.email)
-        profile = {'name': profile_data.first_name + profile_data.last_name, 'room_number': profile_data.room_number,
-                   'mobile': profile_data.phone}
+        print(profile_data.phone)
+        profile = {'name': profile_data.first_name +" " +profile_data.last_name, 'room_number': profile_data.room_number,
+                   'phone': profile_data.phone}
 
         args = {'dates': dates, 'profile': profile, }
         return render(request, 'mhsite/mess/verify.html', args)

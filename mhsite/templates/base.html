@@ -59,8 +59,11 @@
             <li class='active'><a href="/" style='color:rgba(255,255,255,0.87);'>Home</a></li>
             <li><a href="/gallery" style='color:rgba(255,255,255,0.87);'>Gallery</a></li>
             {% with 'admin mess secretary' as list %}
-            {% if user.username in list.split %}
-            <li><a href="/admins/manage">Manage</a></li>
+            {% if user.username in list.split and user.username == 'mess'%}
+          <li><a href="/mess/secretary/processing" style='color:rgba(255,255,255,0.87);'>Manage</a></li>
+          <li><a href="/expense" style='color:rgba(255,255,255,0.87);'>Expense</a></li>
+            {% elif user.username in list.split and user.username != mess %}
+          <li><a href="/admins/manage" style='color:rgba(255,255,255,0.87);'>Manage</a></li>
             {% else %}
             <li><a href="/students/studentscorner" style='color:rgba(255,255,255,0.87);'>Student's corner</a></li>
             <li><a href="/mess" style='color:rgba(255,255,255,0.87);'>Mess</a></li>
