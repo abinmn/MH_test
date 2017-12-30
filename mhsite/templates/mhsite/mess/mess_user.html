@@ -5,37 +5,39 @@
 
       <div class = "container">
           <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
-
-              <div class='row'>
-                  <a href='/mess_cut/apply' class="col offset-s2 s8 waves-effect waves-light btn blue darken-2">Apply Messcut</a>
-              </div>
-              <div class = "row">
+            <div class='row' style='display:flex; justify-content:right;'>
+              <a href='/mess_cut/apply' class="col offset-s8 waves-effect waves-light btn blue darken-2">Apply Messcut</a>
+            </div>
+              <div class='row' style='display:flex; justify-content:center;'>
+                  
                   <form action = "" method="POST">
                     {%csrf_token%}
-                      <table><tr><td>
+                      <table>
+                      <tr>
+                      <td>
 
-                     <div id = "date">
-                       <select class="browser-default" name = "month">
+                      <div style='float:left; padding-right:2vw;' id = "date">
+                        <select style='width:25vw;' class="browser-default" name = "month">
                         {% for month in calendar.months %}
                           <option value={{month}} {% if month == calendar.default.1%}selected="selected"{% endif %}> {{month}} </option>
                         {% endfor %}
                         </select>
+                      </div>
 
-                     </div>
-                        </td></td>
-                              <div id = "date">
-                        <select class="browser-default" name = "year">
+                      <div style='float:left;' id = "date">
+                        <select style='width:25vw;' class="browser-default" name = "year">
                           {% for year in calendar.years%}
                             <option value="{{year}}">{{year}}</option>
                           {% endfor %}
                         </select>
-                              </div>
-                          </td></tr>
-                      </table>
-                      <div class = "row">
-                    <input type="submit" value="Submit" class="col offset-s2 s8 waves-effect waves-light btn green" />
                       </div>
+
+                      </td>
+                      </tr>
+                      </table>
+                        <input style='width:25vw;' type="submit" value="Submit" class="col offset-s3 s8 waves-effect waves-light btn green" />
                   </form>
+                </div>
               </div>
           </div>
       </div>
@@ -44,27 +46,21 @@
       <div class = "container">
           <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
               <div class = "row">
-                 <div  class="col s12" style="margin-top:25px; " >
-                    <ul class = "tabs">
-                       <li class = "tab col s3" ><a class = "active" href = "#processing">Processing</a></li>
-                       <li class = "tab col s3"><a href = "#approved">
-                          Approved</a></li>
-                       <li class = "tab col s3"><a href = "#rejected">Rejected</a></li>
+                 <div  class="col s12" style="margin-top:25px;" >
+                    <ul class = "tabs tabs-fixed-width">
+                       <li style='background-color:rgba(0,0,0,0.87);' class = "tab col s3" ><a class = "active" href = "#processing">Processing</a></li>
+                       <li style='background-color:rgba(0,0,0,0.87);' class = "tab col s3"><a href = "#approved">Approved</a></li>
+                       <li style='background-color:rgba(0,0,0,0.87);' class = "tab col s3"><a href = "#rejected">Rejected</a></li>
                     </ul>
                  </div>
               </div>
-          </div>
-      </div>
-
-
-
 
          <div id = "processing" class = "col s12">
            <div class='container'>
                <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
                    <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Applied Mess Cut</h3>
                    <div class='row'>
-                       <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+                       <table class="bordered">
 
                          <tbody>
 
@@ -76,7 +72,7 @@
 
                          {% for date in processing%}
 
-                           <tr>
+                           <tr style='text-align:left; color:rgba(255,255,255,0.87)'>
                               <td>{{date}}</td>
                            </tr>
                           {% endfor %}
@@ -97,7 +93,7 @@
 
                    <div class='row'>
 
-                       <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+                       <table class="bordered">
 
 
                            <tbody>
@@ -109,7 +105,7 @@
 
                             {% else %}
                              {% for date in approved%}
-                             <tr>
+                             <tr style='text-align:left; color:rgba(255,255,255,0.87)'>
                                <td> {{date}} </td>
                             </tr>
                             {% endfor %}
@@ -128,7 +124,7 @@
                <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
                    <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Rejected Mess Cuts</h3>
                    <div class='row'>
-                       <table bgcolor="#ccc" style="border-radius:10px" class="striped highlight col offset-s2 s8">
+                       <table class="bordered">
 
 
                            <tbody>
@@ -140,7 +136,7 @@
 
                             {% else %}
                              {% for date in rejected%}
-                             <tr>
+                             <tr style='text-align:left; color:rgba(255,255,255,0.87)'>
                                <td> {{date}} </td>
                             </tr>
                             {% endfor %}
@@ -152,7 +148,9 @@
                </div>
            </div>
          </div>
-
+        
+        </div>
+      </div>
       </div>
       </div>
 
