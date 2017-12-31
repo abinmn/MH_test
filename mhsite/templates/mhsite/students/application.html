@@ -14,6 +14,7 @@
                   <div class='input-field col s8 offset-s2'>
                       <input type="text" value='{{usern.0}}' name="admission_number" id="id_admission_number" required maxlength="7" />
                       <label for="id_admission_number">Admission number:</label>
+                      
                   </div>
               </div>
 
@@ -25,6 +26,9 @@
                   <div class='input-field col s8 offset-s2'>
                       <input type="text" value='{{usern.1}}' name="first_name" id="id_first_name" required maxlength="100" />
                       <label for="id_first_name">First name:</label>
+                      <div class="error">
+                        {{form.first_name.errors|escape}}
+                      </div>
                   </div>
               </div>
 
@@ -36,6 +40,9 @@
                   <div class='input-field col s8 offset-s2'>
                       <input type="text" value='{{usern.2}}' name="last_name" id="id_last_name" required maxlength="100" />
                       <label for="id_last_name">Last name:</label>
+                      <div class="error">
+                        {{form.last_name.errors|escape}}
+                      </div>
                   </div>
               </div>
 
@@ -47,96 +54,36 @@
                   <div class='input-field col s8 offset-s2'>
                       <input type="text" value='{{usern.3}}' name="email" id="id_email" required maxlength="100" />
                       <label for="id_email">E mail:</label>
+                      <div class="error">
+                        {{form.email.errors|escape}}
+                      </div>
                   </div>
               </div>
 
 
+            {%with 'admission_number first_name last_name email' as list%}
+            {%for field in form%}
+            {%if field.name not in list%}
+            <div class='row'>
+                <div class='input-field col s8 offset-s2'>
 
-
-
-              <div class='row'>
-                  <div class='input-field col s8 offset-s2'>
-                      <input type="text" name="room_number" value="{{data.room_number}}" id="id_room_number" required maxlength="500" />
-                      <label for="id_room_number">Room No:</label>
-                  </div>
-              </div>
-
-
-
-
-
-              <div class='row'>
-                  <div class='input-field col s8 offset-s2'>
-                      <input type="text" name="address" value="{{data.address}}" id="id_address" required maxlength="500" />
-                      <label for="id_address">Address:</label>
-                  </div>
-              </div>
-
-
-
-
-
-              <div class='row'>
-                  <div class='input-field col s8 offset-s2'>
-                      <input type="text" name="pincode" value="{{data.pincode}}" id="id_pincode" required maxlength="6" />
-                      <label for="id_pincode">Pincode:</label>
-                  </div>
-              </div>
+                    {{field}}
+                    {{ field.label_tag }}
+                    {% if field.errors%}
+                    <div class = "error">
+                      {{field.errors|striptags}}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {%endif%}
+            {%endfor%}
+            {%endwith%}
 
 
 
 
 
-              <div class='row'>
-                  <div class='input-field col s8 offset-s2'>
-                      <input type="text" name="phone" value="{{data.phone}}" id="id_phone" required maxlength="10" />
-                      <label for="id_phone">Phone:</label>
-                  </div>
-              </div>
-
-
-
-
-
-              <div class='row'>
-                  <div class='input-field col s8 offset-s2'>
-                      <input type="text" class="datepicker" name="date_of_birth" value="{{data.dob}}" id="id_date_of_birth" required />
-                      <label for="id_date_of_birth">Date of birth:</label>
-                  </div>
-              </div>
-
-
-
-
-
-              <div class='row'>
-                  <div class='input-field col s8 offset-s2'>
-                      <input type="text" name="category" value="{{data.category}}" id="id_category" required maxlength="10" />
-                      <label for="id_category">Category:</label>
-                  </div>
-              </div>
-
-
-
-
-
-              <div class='row'>
-                  <div class='input-field col s8 offset-s2'>
-                      <input type="text" name="religion" value="{{data.religion}}" id="id_religion" required maxlength="50" />
-                      <label for="id_religion">Religion:</label>
-                  </div>
-              </div>
-
-
-
-
-
-              <div class='row'>
-                  <div class='input-field col s8 offset-s2'>
-                      <input type="text" name="caste" value="{{data.caste}}" id="id_caste" required maxlength="50" />
-                      <label for="id_caste">Caste:</label>
-                  </div>
-              </div>
                 <div class='row'>
                     <input type="submit" value="Register" class="col offset-s2 s8 waves-effect waves-light btn green" />
                 </div>

@@ -134,17 +134,28 @@ def application(request):
         form = ApplicationForm()
         args = {'form': form}
         if request.method == 'POST':
+            form = ApplicationForm(request.POST)
             if Application.objects.filter(email=request.user.username).exists():
+                print(form.errors)
                 instance = Application.objects.get(email=request.user.email)
-                form = ApplicationForm(request.POST, instance = instance)
-            else:
-                form = ApplicationForm(request.POST)
+                form = ApplicationForm(request.POST,instance = instance)
+
             if form.is_valid():
+
                 form.save()
+
                 return redirect('/students/studentscorner')
             else:
-                print(form.errors)
-                args = {'form': form}
+
+                form = ApplicationForm(request.POST)
+
+                students = studentlist()
+                usern = request.user.username
+                users = ''
+                for x in students:
+                    if x[3] == usern:
+                        users = x
+                args = {'form': form, 'usern': users}
                 return render(request, 'mhsite/students/application.html', args)
         else:
             students = studentlist()
@@ -154,13 +165,14 @@ def application(request):
                 if x[3] == usern:
                     users = x
 
-            try:
-                app = Application.objects.get(email=request.user.email)
-                personal = {'room_number':app.room_number, 'address':app.address, 'pincode':app.pincode, 'phone':app.phone, 'dob':app.date_of_birth, 'category':app.category, 'religion':app.religion, 'caste':app.caste }
-            except:
-                personal = ''
+            if Application.objects.filter(email=request.user.username).exists():
+                print(form.errors)
+                instance = Application.objects.get(email=request.user.email)
+                form = ApplicationForm(instance = instance)
+
             if users is not None:
-                args = {'form': form, 'usern': users, 'data':personal}
+
+                args = {'form': form, 'usern': users, }
                 return render(request, 'mhsite/students/application.html', args)
     else:
         return redirect('/')
@@ -222,7 +234,6 @@ def mess_cut(request, year=str(datetime.now().year), month=str(datetime.now().mo
         return redirect('/accounts/login')
 
     except:
-        print ("hello")
         if request.method == 'POST':
             error = True
             month = request.POST['month']
