@@ -117,7 +117,6 @@ def pwdreset(request):
                 form.save()
                 return redirect('/accounts/login')
             else:
-                print(form.errors)
                 args = {'error': 'Password reset failed', 'erlink': '/accounts/pwdreset'}
                 return render(request, 'mhsite/regerror.html', args)
 
@@ -136,7 +135,6 @@ def application(request):
         if request.method == 'POST':
             form = ApplicationForm(request.POST)
             if Application.objects.filter(email=request.user.username).exists():
-                print(form.errors)
                 instance = Application.objects.get(email=request.user.email)
                 form = ApplicationForm(request.POST,instance = instance)
 
@@ -166,7 +164,7 @@ def application(request):
                     users = x
 
             if Application.objects.filter(email=request.user.username).exists():
-                print(form.errors)
+
                 instance = Application.objects.get(email=request.user.email)
                 form = ApplicationForm(instance = instance)
 
@@ -248,6 +246,7 @@ def mess_cut(request, year=str(datetime.now().year), month=str(datetime.now().mo
 
 def date_gen(lst, start_date, end_date, objects=None):
     delta = end_date - start_date
+
     for i in range(delta.days + 1):
         lst['processing'].append(str(start_date + timedelta(days=i)))
     seen = set()
@@ -289,6 +288,11 @@ def mess_cut_apply(request):
             email = request.user.email
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
+            delta = (end_date - start_date).days + 1
+            print (delta)
+            if delta < 4:
+                args = {'form': form, 'error':delta}
+                return render(request, 'mhsite/mess/mess_cut.html', args)
             try:
 
                 obj = MessCut.objects.get(email=email)
@@ -296,16 +300,15 @@ def mess_cut_apply(request):
 
                 date_list = (date_gen(date_list, start_date, end_date))
 
-                #if len(date_list) < 3:
 
-                    #return render(request, 'mhsite/mess_cut.html')
 
                 approved_dates = json.loads(obj.approved_dates)
                 rejected_dates = json.loads(obj.rejected_dates)
 
                 duplicate_dates = duplicate(date_list, approved_dates) + duplicate(date_list, rejected_dates)
                 date_list['processing'] = [date for date in date_list['processing'] if date not in duplicate_dates]
-
+                date_list['processing'].sort(reverse = True)
+                print (date_list['processing'])
                 date_list = (json.dumps(date_list))
 
                 obj.mess_cut_dates = date_list
@@ -324,7 +327,7 @@ def mess_cut_apply(request):
             return redirect('/mess_cut')
         else:
             args = {'form': form}
-            return render(request, 'mhsite/mess_cut.html', args)
+            return render(request, 'mhsite/mess/mess_cut.html', args)
     else:
         form = MessCutForm()
         args = {'form': form}
@@ -414,7 +417,7 @@ def processing(request, year=str(datetime.now().year), month=str(datetime.now().
         cal = {'months': list(calendar.month_name), 'years': years,
                'default': [year, datetime.strftime(datetime(2017, int(month), 1), '%B')]}
         args = {'data': res, 'approved': approved, 'rejected': rejected, 'calendar': cal}
-        print (approved)
+
         return render(request, 'mhsite/mess/mess_cut_processing.html', args)
 
     else:
@@ -426,9 +429,7 @@ def approval(request, mess_id):
         mess = MessCut.objects.get(id=mess_id)
         mess_data = json.loads(mess.mess_cut_dates)
         dates = mess_data['processing']
-
         profile_data = Application.objects.get(email=mess.email)
-        print(profile_data.phone)
         profile = {'name': profile_data.first_name +" " +profile_data.last_name, 'room_number': profile_data.room_number,
                    'phone': profile_data.phone}
 
@@ -493,17 +494,21 @@ def edit(request, type, mess_id, year=datetime.now().year, month=datetime.now().
     if request.user.is_authenticated and (request.user.username == 'mess'):
         if month.isalpha():
             month = datetime.strptime(month, "%B").month
-
-        approved_dates = json.loads(MessCut.objects.get(id=mess_id).approved_dates)
-        rejected_dates = json.loads(MessCut.objects.get(id=mess_id).rejected_dates)
+        mess = MessCut.objects.get(id=mess_id)
+        approved_dates = json.loads(mess.approved_dates)
+        rejected_dates = json.loads(mess.rejected_dates)
 
         if type == 'approved':
             dates = approved_dates[str(year)][str(month)]
         elif type == 'rejected':
             dates = rejected_dates[str(year)][str(month)]
 
-        args = {'dates': dates, 'type': type, 'mess_id': mess_id}
-        return render(request, 'mhsite/edit.html', args)
+        profile_data = Application.objects.get(email=mess.email)
+        profile = {'name': profile_data.first_name +" " +profile_data.last_name, 'room_number': profile_data.room_number,
+                   'phone': profile_data.phone}
+
+        args = {'dates': dates, 'type': type, 'mess_id': mess_id, 'profile':profile}
+        return render(request, 'mhsite/mess/edit.html', args)
 
     else:
         return redirect('/')
@@ -527,13 +532,16 @@ def submit_edit(request, type, mess_id, year=datetime.now().year, month=datetime
                     if year in rejected_dates:
                         if str(month) in rejected_dates[year]:
                             rejected_dates[str(year)][str(month)].append(date)
+                            rejected_dates[str(year)][str(month)].sort(reverse=True)
                         else:
                             rejected_dates[str(year)][str(month)] = []
                             rejected_dates[str(year)][str(month)].append(date)
+                            rejected_dates[str(year)][str(month)].sort(reverse=True)
                     else:
                         rejected_dates[str(year)] = {}
                         rejected_dates[str(year)][str(month)] = []
                         rejected_dates[str(year)][str(month)].append(date)
+                        rejected_dates[str(year)][str(month)].sort(reverse=True)
 
         if type == 'rejected':
             dates = {date: request.POST[date] for date in rejected_dates[str(year)][str(month)] if date in request.POST}
@@ -544,13 +552,16 @@ def submit_edit(request, type, mess_id, year=datetime.now().year, month=datetime
                     if year in approved_dates:
                         if str(month) in approved_dates[year]:
                             approved_dates[str(year)][str(month)].append(date)
+                            approved_dates[str(year)][str(month)].sort(reverse=True)
                         else:
                             approved_dates[year][str(month)] = []
                             approved_dates[str(year)][str(month)].append(date)
+                            approved_dates[str(year)][str(month)].sort(reverse=True)
                     else:
                         approved_dates[year] = {}
                         approved_dates[year][str(month)] = []
                         approved_dates[str(year)][str(month)].append(date)
+                        approved_dates[str(year)][str(month)].sort(reverse=True)
 
         mess.approved_dates = json.dumps(approved_dates)
         mess.rejected_dates = json.dumps(rejected_dates)
@@ -559,6 +570,67 @@ def submit_edit(request, type, mess_id, year=datetime.now().year, month=datetime
 
         return redirect('/mess/secretary/processing')
 
+    else:
+        return redirect('/')
+
+def expense_list(request):
+    if request.user.is_authenticated and (request.user.username == 'mess'):
+
+        data = {}
+        for instance in Expense.objects.all().order_by('-date'):
+            date = instance.date
+            data[format(date, 'F, Y')] = [format(date, 'Y-m-d'), instance.total]
+            args = {'data': data}
+
+        if request.POST:
+            download_date = request.POST['download']
+            download_date = datetime.strptime(download_date, '%Y-%m-%d')
+            instance = Expense.objects.get(date = download_date)
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="expense.pdf"'
+            from io import StringIO, BytesIO
+            buff = BytesIO()
+
+            from reportlab.lib.styles import getSampleStyleSheet
+            from reportlab.lib import colors
+            from reportlab.pdfgen import canvas
+            from reportlab.lib.pagesizes import A4
+            from reportlab.lib.units import inch
+            from reportlab.platypus import SimpleDocTemplate, Paragraph, Image, Spacer, PageBreak, Table, TableStyle
+
+            styles = getSampleStyleSheet()
+            styleNormal = styles['Normal']
+            styleHeading = styles['Heading2']
+            styleHeading.alignment = 0
+
+            story = []
+            story.append(Paragraph('Expense for '+format(download_date, 'F, Y'), styleHeading))
+
+
+
+            final_data = [['Item', 'Cost'],
+                          [instance._meta.get_field('item1').verbose_name, instance.item1],
+                          [instance._meta.get_field('item2').verbose_name, instance.item2],
+                          [instance._meta.get_field('item3').verbose_name, instance.item3],
+                          [instance._meta.get_field('item4').verbose_name, instance.item4],
+                          [instance._meta.get_field('item5').verbose_name, instance.item5],
+                          ['Total', instance.total]]
+            tableData = final_data
+            ts = [
+        ('LINEABOVE', (0,0), (-1,0), 1, colors.gray),
+        ('LINEBELOW', (0,0), (-1,0), 1, colors.gray),
+        ('LINEABOVE', (0,-1), (-1,-1), 1, colors.gray),]
+            story.append(Table(tableData, hAlign = 'LEFT', style=ts))
+
+            doc = SimpleDocTemplate(buff, title = "Expense for %s"%(format(download_date, 'F, Y')), author = "mess committee")
+            doc.build(story)
+            response.write(buff.getvalue())
+            buff.close()
+            return response
+
+
+        else:
+            return render(request, 'mhsite/expense_list.html', args)
     else:
         return redirect('/')
 
@@ -577,7 +649,7 @@ def expense(request, year, month, day):
 
                 try:
                     form.save()
-                    return redirect('/expense' + '/' + date)
+                    return redirect('/expense' )
 
                 except IntegrityError as e:
 
@@ -622,6 +694,7 @@ class ReportDetails(View):
 
     def get(self, request, year, month, day):
         if request.user.is_authenticated and (request.user.username == 'mess'):
+
             date = (year + '-' + month + '-' + day)
             try:
                 expense = Expense.objects.get(date=date)
