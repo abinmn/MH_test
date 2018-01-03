@@ -17,6 +17,9 @@ class ApplicationForm(forms.ModelForm):
         exclude = ('status',)
 
 
+        
+
+
 # Signup Form after application is approved
 class RegistrationForm(UserCreationForm):
     admission_number = forms.CharField(max_length=7, validators=[
