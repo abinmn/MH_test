@@ -19,8 +19,6 @@ class Application(models.Model):
     phone=models.CharField(max_length=10,validators=[RegexValidator(regex=r'[0-9]{10}',message='Invalid mobile number')])
     date_of_birth=models.DateField()
     category=models.CharField(max_length=10)
-    religion=models.CharField(max_length=50)
-    caste=models.CharField(max_length=50)
 
     def __str__(self):
         return self.first_name+" "+self.last_name
