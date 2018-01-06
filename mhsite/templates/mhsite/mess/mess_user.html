@@ -9,7 +9,7 @@
               <a href='/mess_cut/apply' class="col offset-s8 waves-effect waves-light btn blue darken-2">Apply Messcut</a>
             </div>
               <div class='row' style='display:flex; justify-content:center;'>
-                  
+
                   <form action = "" method="POST">
                     {%csrf_token%}
                       <table>
@@ -27,7 +27,7 @@
                       <div style='float:left;' id = "date">
                         <select style='width:25vw;' class="browser-default" name = "year">
                           {% for year in calendar.years%}
-                            <option value="{{year}}">{{year}}</option>
+                            <option value="{{year}}" {% if year == calendar.default.0%}selected="selected"{% endif %}>{{year}}</option>
                           {% endfor %}
                         </select>
                       </div>
@@ -148,7 +148,7 @@
                </div>
            </div>
          </div>
-        
+
         </div>
       </div>
       </div>

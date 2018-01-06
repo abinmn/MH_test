@@ -27,7 +27,6 @@ class Profile(models.Model):
     admission_number =  models.CharField(max_length=7, default='1234/17')
     fname = models.CharField(max_length=100, default='Name')
     lname = models.CharField(max_length=100, default='Last_Name')
-    #e_mail = models.CharField(max_length=100, default='E-mail')
     email = models.EmailField()
     room_number = models.IntegerField(default=0)
     phone = models.CharField(max_length=10,validators=[RegexValidator(regex=r'[0-9]{10}',message='Invalid mobile number')])
