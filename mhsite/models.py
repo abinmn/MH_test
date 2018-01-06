@@ -19,8 +19,6 @@ class Application(models.Model):
     phone=models.CharField(max_length=10,validators=[RegexValidator(regex=r'[0-9]{10}',message='Invalid mobile number')])
     date_of_birth=models.DateField()
     category=models.CharField(max_length=10)
-    religion=models.CharField(max_length=50)
-    caste=models.CharField(max_length=50)
 
     def __str__(self):
         return self.first_name+" "+self.last_name
@@ -43,11 +41,11 @@ class Expense(models.Model):
 
     #month=models.CharField(max_length=9, choices=MONTH_CHOICES, default='1')
     date=models.DateField(unique=True)
-    item1=models.DecimalField(default=0.0,decimal_places=2,max_digits=10)
-    item2=models.DecimalField(default=0.0,decimal_places=2,max_digits=10)
-    item3=models.DecimalField(default=0.0,decimal_places=2,max_digits=10)
-    item4=models.DecimalField(default=0.0,decimal_places=2,max_digits=10)
-    item5=models.DecimalField(default=0.0,decimal_places=2,max_digits=10)
+    item1=models.DecimalField(default=0.0,decimal_places=2,max_digits=10, verbose_name="Supplyco")
+    item2=models.DecimalField(default=0.0,decimal_places=2,max_digits=10, verbose_name="Gas")
+    item3=models.DecimalField(default=0.0,decimal_places=2,max_digits=10, verbose_name="Meat")
+    item4=models.DecimalField(default=0.0,decimal_places=2,max_digits=10, verbose_name="Fish")
+    item5=models.DecimalField(default=0.0,decimal_places=2,max_digits=10, verbose_name="Others")
 
     @property
     def total(self):

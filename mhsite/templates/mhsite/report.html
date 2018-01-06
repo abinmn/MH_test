@@ -6,13 +6,13 @@
 
     <div class='container'>
         <div class="card card-panel" style="margin-top:15px; background-color:rgba(0, 0, 0, 0.6)">
-            <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Application Form</h3>
+            <h3 style="text-align:center;color:rgba(255,255,255,0.87); ">Expense Tracker</h3>
 
             <form method="post" class='col s12'>
                 {% csrf_token %}
                 {{ form }}
                 <div class='row'>
-                      <input type="submit" class="col offset-s2 s8 waves-effect waves-light btn blue darken-2" value="Submit" />
+                      <button type="submit" class="col offset-s2 s8 waves-effect waves-light btn blue darken-2">Submit</button>
                 </div>
             </form>
         </div>

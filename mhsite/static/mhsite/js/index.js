@@ -46,7 +46,11 @@ $(document).ready(function(){
         }
     });
 
+    //Initialize swipeable tabs
+    //$('.tabs').tabs({swipeable: true});
+
     //Carousel slideshow
+    $('.carousel').carousel({fullWidth:true});
     //setInterval(function(){
     //    $('.carousel').carousel('next');
     //},3000);

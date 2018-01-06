@@ -12,8 +12,13 @@
                 {% csrf_token %}
                 {{ form }}
                 <div class='row'>
-                      <input type="submit" class="col offset-s2 s8 waves-effect waves-light btn blue darken-2" value="Submit" />
+                      <button type="submit" class="col offset-s2 s8 waves-effect waves-light btn blue darken-2">Submit</button>
                 </div>
+                {%if error%}
+                <div class = "error">
+                  At least 4 days are required, you selected {{error}}
+                </div>
+                {% endif %}
             </form>
         </div>
     </div>
