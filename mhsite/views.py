@@ -342,6 +342,7 @@ def processing(request, year=str(datetime.now().year), month=str(datetime.now().
         res = []
         approved = []
         rejected = []
+        years = []
         for row in rows:
             profile = Application.objects.get(email=row.email)
             name = profile.first_name + " " + profile.last_name
@@ -349,6 +350,13 @@ def processing(request, year=str(datetime.now().year), month=str(datetime.now().
             room_number = profile.room_number  # Complete after finishing profile
             approved_dates = json.loads(MessCut.objects.get(pk=mid).approved_dates)
             rejected_dates = json.loads(MessCut.objects.get(pk=mid).rejected_dates)
+
+            for x in approved_dates:
+                if x not in years:
+                    years.append(x)
+            for x in rejected_dates:
+                if x not in years:
+                    years.append(x)
 
             data = json.loads(row.mess_cut_dates)
             timestamp = float(MessCut.objects.get(email=row.email).applied_date)
@@ -401,12 +409,6 @@ def processing(request, year=str(datetime.now().year), month=str(datetime.now().
             response.write(buff.getvalue())
             buff.close()
             return response
-
-        years = [year for year in approved_dates]
-        dupe = [year for year in rejected_dates if year not in years]
-        if len(dupe) > 0:
-            for year in dupe:
-                years.append(year)
 
         if len(years) == 0:
             years = [year]
