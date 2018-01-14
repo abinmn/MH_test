@@ -23,6 +23,7 @@ $(document).ready(function(){
         s=s+"</div>";
         $('.carousel-container').html(s);
         $('.carousel').carousel({fullWidth:true});
+        
     });
 
     //Clicking on thumbnail changes carousel content to that album
