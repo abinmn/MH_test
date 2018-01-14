@@ -13,9 +13,13 @@
             </div>
             <div class="row">
 
-                <form method="POST" action="submit" >
+                <form name="f1" method="POST" action="submit" >
                   {% csrf_token %}
                   <ul>
+                    <li style="margin-left:0em">
+          <input name="accept_reject" type="radio" id="test1" value="1" onClick="selectAll(f1)" /><label for="test1">Approve All</label><br/>
+               <input name="accept_reject" type="radio" id="test2" value="0" onClick="selectAll(f1)" /><label for="test2">Reject All</label>
+                      </li>
                     {% for date in dates%}
                       <li> <p style="color:white"> {{ date }}
                             <input type="radio" id="{{date}}" id="test1"  name="{{date}}" value="1" {%if type == 'approved' %}checked {%endif%} />
@@ -32,4 +36,55 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        function selectAll(f1) {
+
+          var check = document.getElementsByName("accept_reject"),
+        	    radios = document.f1.elements;
+
+          //If the first radio is checked
+        	if (check[0].checked) {
+
+        		for( i = 0; i < radios.length; i++ ) {
+
+              //And the elements are radios
+        			if( radios[i].type == "radio" ) {
+
+                //And the radio elements's value are 1
+        				if (radios[i].value == 1 ) {
+                  //Check all radio elements with value = 1
+        					radios[i].checked = true;
+        				}
+
+        			}//if
+
+        		}//for
+
+          //If the second radio is checked
+        	} else {
+
+        		for( i = 0; i < radios.length; i++ ) {
+
+              //And the elements are radios
+        			if( radios[i].type == "radio" ) {
+
+                //And the radio elements's value are 0
+        				if (radios[i].value == 0 ) {
+
+                  //Check all radio elements with value = 0
+        					radios[i].checked = true;
+
+        				}
+
+        			}//if
+
+        		}//for
+
+        	};//if
+          return null;
+        }
+        </script>
+
+
 {% endblock %}

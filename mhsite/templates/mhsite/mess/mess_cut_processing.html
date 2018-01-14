@@ -16,11 +16,11 @@
                         <div style='float:left; padding-right:2vw' id = "date">
                             <select style='width:25vw;' class="browser-default" name = "year">
                               {% for year in calendar.years%}
-                                <option value="{{year}}">{{year}}</option>
+                                <option value="{{year}}" {% if year == calendar.default.0%}selected="selected"{% endif %}>{{year}}</option>
                               {% endfor %}
                             </select>
                         </div>
-          
+
                         <div style='float:right' id = "date">
                           <select style='width:25vw;' class="browser-default" name = "month">
                             {% for month in calendar.months%}
@@ -33,11 +33,11 @@
                       </tr>
                       </table>
                       <div class = "row" style='display:flex; justify-content:center;'>
-                        <button style='width:25vw;' type="submit" class="col offset-s1 s8 waves-effect waves-light btn green">Submit</button>
+                        <input style='width:25vw;' type="submit" class="col offset-s1 s8 waves-effect waves-light btn green"/>
                       </div>
                       <input type = "hidden" value ="download">
                       <div class = "row" style='display:flex; justify-content:center;'>
-                        <button style='width:25vw;' type = "submit" name = 'download' class="col offset-s1 s8 waves-effect waves-light btn green">Download</button>
+                        <input style='width:25vw;' type = "submit" name = 'download' value="Download" class="col offset-s1 s8 waves-effect waves-light btn green"/>
                       </div>
                   </form>
               </div>
