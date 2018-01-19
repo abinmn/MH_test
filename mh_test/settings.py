@@ -26,7 +26,7 @@ SECRET_KEY = 'x6&z!ji1i)ytxfk4$8ybj=4b3@$((th@s$dbb@-%trkv$z(zzp'
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.43.75', 'localhost']
+ALLOWED_HOSTS = ['www.mecmh.in']
 
 
 
@@ -124,5 +124,10 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/'
 
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 1025
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' # mail service smtp
+EMAIL_HOST_USER = 'mecmenshostel1@gmail.com' # email id
+EMAIL_HOST_PASSWORD = "9562113256" #password
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+

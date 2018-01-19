@@ -33,14 +33,11 @@ class RegistrationForm(UserCreationForm):
             'admission_number',
             'first_name',
             'last_name',
-            'email',
-            'password1',
+            'password1',students = studentlist()
             'password2',
         )
-    def save(self, commit=True):
-        user = super(RegistrationForm, self).save(commit=False)
-        user.username = self.cleaned_data['email']
-        user.email = self.cleaned_data['email']
+
+        user.email = email
         user.password1 = self.cleaned_data['password1']
         user.password2 = self.cleaned_data['password2']
 

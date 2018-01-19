@@ -97,6 +97,7 @@ def loginf(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+
                 return redirect('/')
         else:
             args = {'error': 'Login Failed', 'erlink': '/accounts/login'}
@@ -201,6 +202,7 @@ def mess_cut(request, year=str(datetime.now().year), month=str(datetime.now().mo
             year = str(request.POST['year'])
             month = str(datetime.strptime(request.POST['month'], '%B').month)
 
+
         approved_dates = json.loads(mess.approved_dates)
         rejected_dates = json.loads(mess.rejected_dates)
 
@@ -237,9 +239,11 @@ def mess_cut(request, year=str(datetime.now().year), month=str(datetime.now().mo
             error = True
             month = request.POST['month']
         else:
+
             error = False
             month = datetime.strftime(datetime(2017, int(month), 1), '%B')
-
+        if not Application.objects.filter(email=request.user.username).exists():
+            return redirect('/students/application')
         cal = {'months': list(calendar.month_name), 'years': [year], 'default': [year, month]}
         args = {'calendar': cal, 'status': error}
         return render(request, 'mhsite/mess/mess_user.html', args)
@@ -633,6 +637,7 @@ def expense_list(request):
 
 
         else:
+            args = {'data': data}
             return render(request, 'mhsite/expense_list.html', args)
     else:
         return redirect('/')
