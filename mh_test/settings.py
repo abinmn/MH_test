@@ -26,7 +26,7 @@ SECRET_KEY = 'x6&z!ji1i)ytxfk4$8ybj=4b3@$((th@s$dbb@-%trkv$z(zzp'
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['www.mecmh.in']
+ALLOWED_HOSTS = ['www.mecmh.in', 'localhost']
 
 
 
