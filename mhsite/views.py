@@ -91,7 +91,7 @@ def loginf(request):
     form = AuthenticationForm
     args = {'form': form}
     if request.method == 'POST':
-        username = request.POST['username']
+        username = request.POST['username'].strip()
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
